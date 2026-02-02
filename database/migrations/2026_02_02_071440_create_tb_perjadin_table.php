@@ -20,8 +20,7 @@ return new class extends Migration
             $table->string('tujuan', 50);
             $table->date('tgl_berangkat');
             $table->date('tgl_pulang');
-            $table->decim('pagu', 9,2);
-            $table->tinyInteger('tipe');
+            $table->decimal('pagu', 9,2);
             $table->tinyInteger('status');
             $table->timestamps();
         });

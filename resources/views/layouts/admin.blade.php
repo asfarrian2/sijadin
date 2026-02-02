@@ -15,13 +15,13 @@
 	<meta name="format-detection" content="telephone=no">
 
 	<!-- PAGE TITLE HERE -->
-	<title>SI-RETDA KALSEL</title>
+	<title>SIJADIN BPKUK</title>
 
 	<!-- FAVICONS ICON -->
-	<link rel="shortcut icon" type="image/png" href="{{ asset('images/profile/Default Picture Profile.png') }}" />
+	<link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/profile/Default Picture Profile.png') }}" />
 
 	<link href="{{ asset('assets/vendor/jquery-nice-select/css/nice-select.css') }}" rel="stylesheet">
-	<link rel="stylesheet" href="{{ asset('vendor/nouislider/nouislider.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/vendor/nouislider/nouislider.min.css') }}">
      <!-- Datatable -->
      <link href="{{ asset ('assets/vendor/datatables/css/jquery.dataTables.min.css') }}" rel="stylesheet">
      <!-- Sweat Alert -->
@@ -89,7 +89,7 @@
 						<a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
 							<img src="{{ asset('assets/images/profile/avatar.png') }}" width="20" alt=""/>
 							<div class="header-info ms-3">
-								<span class="font-w600 ">ADMIN BAPENDA</span>
+								<span class="font-w600 ">ADMIN BAKATKOP</span>
 								<small class="text-start font-w400">Prov. Kalimantan Selatan</small>
 							</div>
 						</a>
@@ -104,26 +104,20 @@
 							</a>
 						</div>
 					</li>
-                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                    <li>
+                        <a class="ai-icon" href="javascript:void()" aria-expanded="false">
 							<i class="flaticon-025-dashboard"></i>
 							<span class="nav-text">Dashboard</span>
 						</a>
-                        <ul aria-expanded="false">
-							<li><a href="/admin/dashboardAll">APBD T.A. {{Auth::guard('admin')->user()->id_tahun}}</a></li>
-							<li><a href="index-2.html">Target</a></li>
-							<li><a href="my-wallet.html">Pendapatan</a></li>
-							<li><a href="/admin/skpd">SKPD/UPTD</a></li>
-						</ul>
                     </li>
-                    <li><a href="javascript:void()" class="has-arrow ai-icon" aria-expanded="false"  @if(Request::is('admin/realisasi*')) style="background-color: #eefaf9;" @endif>
-							<i class="flaticon-381-calculator"  @if(Request::is('admin/realisasi*')) style="color: #5bcfc5;" @endif></i>
-							<span class="nav-text">Monitoring</span>
+                    <li><a href="javascript:void()" class="has-arrow ai-icon" aria-expanded="false"  @if(Request::is('admin/sumberdana*')) style="background-color: #eefaf9;" @endif>
+							<i class="flaticon-381-calculator"  @if(Request::is('admin/sumberdana*')) style="color: #5bcfc5;" @endif></i>
+							<span class="nav-text">Sumber Dana</span>
 						</a>
-                        <ul aria-expanded="false" @if(Request::is('admin/realisasi*')) class="mm-collapse mm-show" @endif>
-                            <li><a href="/admin/targetapbd">Target APBD</a></li>
-                            <li><a href="/admin/targetapbdp">Target APBD P</a></li>
-                            <li @if(Request::is('admin/realisasi*')) class="mm-active" @endif><a href="/admin/realisasi" @if(Request::is('admin/realisasi*')) class="mm-active" @endif>Realisasi</a></li>
-                            <li><a href="/admin/evaluasi">Evaluasi Retribusi</a></li>
+                        <ul aria-expanded="false" @if(Request::is('admin/sumberdana*')) class="mm-collapse mm-show" @endif>
+                            <li @if(Request::is('admin/sumberdana/subkegiatan*')) class="mm-active" @endif><a href="/admin/sumberdana/subkegiatan" @if(Request::is('admin/sumberdana/subkegiatan*')) class="mm-active" @endif>Sub Kegiatan</a></li>
+                            <li @if(Request::is('admin/sumberdana/koderekening*')) class="mm-active" @endif><a href="/admin/sumberdana/koderekening" @if(Request::is('admin/sumberdana/koderekening*')) class="mm-active" @endif>Kode Rekening</a></li>
+                            <li @if(Request::is('admin/sumberdana/anggaran*')) class="mm-active" @endif><a href="/admin/sumberdana/anggaran" @if(Request::is('admin/sumberdana/anggaran*')) class="mm-active" @endif>Anggaran</a></li>
                         </ul>
 					</li>
                     <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">

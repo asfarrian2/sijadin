@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('id_tahun', 4);
             $table->string('id_subkegiatan', 4);
             $table->string('id_rekening', 4);
-            $table->integer('pagu', 9);
+            $table->string('id_pegawai', 7);
+            $table->decimal('pagu', 12,9);
             $table->tinyInteger('status');
             $table->timestamps();
         });

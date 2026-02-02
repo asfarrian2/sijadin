@@ -14,25 +14,23 @@ return new class extends Migration
     public function up()
     {
         Schema::create('tb_rperjadin', function (Blueprint $table) {
-            $table->string('id_rperjadin', 10)->primary();
+            $table->string('id_rperjadin', 17)->primary();
+            $table->string('id_perjadin', 10);
             $table->string('id_pegawai', 7);
-            $table->decim('uang_harian', 9,2)->nullable();
-            $table->decim('uang_transportasi', 9,2)->nullable();
-            $table->decim('uang_penginapan', 9,2)->nullable();
-            $table->string('nama_penginapan', 50)->nullable();
-            $table->text('nota_penginapan')->nullable();
-            $table->decim('uang_pes_berangkat', 9,2)->nullable();
-            $table->string('bandara_keberangkatan', 7)->nullable();
-            $table->string('maskapai_berangkat', 50)->nullable();
-            $table->string('booking_pes_berangkat', 50)->nullable();
-            $table->string('tiket_pes_berangkat', 50)->nullable();
-            $table->text('nota_tiket_berangkat')->nullable();
-            $table->decim('uang_pes_kepulangan', 9,2)->nullable();
-            $table->string('bandara_kepulangan', 7)->nullable();
-            $table->string('maskapai_kepulangan', 50)->nullable();
-            $table->string('booking_pes_kepulangan', 50)->nullable();
-            $table->string('tiket_pes_kepulangan', 50)->nullable();
-            $table->text('nota_tiket_kepulangan')->nullable();
+            $table->decimal('uang_harian', 10,2)->nullable();
+            $table->decimal('uang_transportasi', 10,2)->nullable();
+            $table->decimal('uang_penginapan', 10,2)->nullable();
+            $table->string('penginapan', 100)->nullable();
+            $table->string('maskapaib', 80)->nullable();
+            $table->string('bandarab', 80)->nullable();
+            $table->string('no_tiketb', 30)->nullable();
+            $table->string('no_bookingb', 30)->nullable();
+            $table->decimal('uang_pesawatb', 10,2)->nullable();
+            $table->string('maskapaip', 80)->nullable();
+            $table->string('bandarap', 80)->nullable();
+            $table->string('no_tiketp', 30)->nullable();
+            $table->string('no_bookingp', 30)->nullable();
+            $table->decimal('uang_pesawatp', 10,2)->nullable();
             $table->timestamps();
         });
     }
