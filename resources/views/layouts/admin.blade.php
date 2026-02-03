@@ -15,7 +15,7 @@
 	<meta name="format-detection" content="telephone=no">
 
 	<!-- PAGE TITLE HERE -->
-	<title>SIJADIN BPKUK</title>
+	<title>Sijadin Balatkop-uk Kalsel</title>
 
 	<!-- FAVICONS ICON -->
 	<link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/profile/Default Picture Profile.png') }}" />
@@ -42,12 +42,11 @@
         <div class="waviy">
 		   <span style="--i:1">S</span>
 		   <span style="--i:2">I</span>
-		   <span style="--i:3">-</span>
-		   <span style="--i:4">R</span>
-		   <span style="--i:5">E</span>
-		   <span style="--i:6">T</span>
-		   <span style="--i:7">D</span>
-           <span style="--i:8">A</span>
+		   <span style="--i:3">J</span>
+		   <span style="--i:4">A</span>
+		   <span style="--i:5">D</span>
+		   <span style="--i:6">I</span>
+		   <span style="--i:7">N</span>
 		</div>
     </div>
     <!--*******************
@@ -115,7 +114,7 @@
 							<span class="nav-text">Sumber Dana</span>
 						</a>
                         <ul aria-expanded="false" @if(Request::is('admin/sumberdana*')) class="mm-collapse mm-show" @endif>
-                            <li @if(Request::is('admin/sumberdana/subkegiatan*')) class="mm-active" @endif><a href="/admin/sumberdana/subkegiatan" @if(Request::is('admin/sumberdana/subkegiatan*')) class="mm-active" @endif>Sub Kegiatan</a></li>
+                            <li @if(Request::is('admin/sumberdana/subkegiatan*')) class="mm-active" @endif><a href="{{ Route('subkegiatan')}}" @if(Request::is('admin/sumberdana/subkegiatan*')) class="mm-active" @endif>Sub Kegiatan</a></li>
                             <li @if(Request::is('admin/sumberdana/koderekening*')) class="mm-active" @endif><a href="/admin/sumberdana/koderekening" @if(Request::is('admin/sumberdana/koderekening*')) class="mm-active" @endif>Kode Rekening</a></li>
                             <li @if(Request::is('admin/sumberdana/anggaran*')) class="mm-active" @endif><a href="/admin/sumberdana/anggaran" @if(Request::is('admin/sumberdana/anggaran*')) class="mm-active" @endif>Anggaran</a></li>
                         </ul>
@@ -166,7 +165,7 @@
                     </li>
                 </ul>
 				<div class="copyright">
-					<p><strong>Dashboard Informasi Pendapatan Daerah<br>Provinsi Kalimantan Selatan</strong> © 2025 BAPENDA Prov. Kalsel</p>
+					<p><strong>Sistem Informasi Perjalanan Dinas<br>Provinsi Kalimantan Selatan</strong> © 2025 BALATKOP-UK Prov. Kalsel</p>
 				</div>
 			</div>
         </div>
@@ -183,7 +182,7 @@
         <div class="footer">
 
             <div class="copyright">
-                <p>Copyright Asfar © Designed &amp; Developed by <a href="https://dexignlab.com/" target="_blank">Badan Pendapatan Daerah Provinsi Kalimantan Selatan</a> 2025</p>
+                <p>Copyright © Designed &amp; Developed by <a href="https://dexignlab.com/" target="_blank">Balatkop-uk Prov. Kalsel</a> 2026</p>
             </div>
         </div>
         <!--**********************************

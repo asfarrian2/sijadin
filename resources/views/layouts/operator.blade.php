@@ -42,12 +42,11 @@
         <div class="waviy">
 		   <span style="--i:1">S</span>
 		   <span style="--i:2">I</span>
-		   <span style="--i:3">-</span>
-		   <span style="--i:4">R</span>
-		   <span style="--i:5">E</span>
-		   <span style="--i:6">T</span>
-		   <span style="--i:7">D</span>
-		   <span style="--i:8">A</span>
+		   <span style="--i:3">J</span>
+		   <span style="--i:4">A</span>
+		   <span style="--i:5">D</span>
+		   <span style="--i:6">I</span>
+		   <span style="--i:7">N</span>
 		</div>
     </div>
     <!--*******************
@@ -139,7 +138,7 @@
                     </li>
                 </ul>
 				<div class="copyright">
-					<p><strong>Dashboard Informasi Pendapatan Daerah<br>Provinsi Kalimantan Selatan</strong> © 2025 BAPENDA Prov. Kalsel</p>
+					<p><strong>Sistem Informasi Perjalanan Dinas<br>Provinsi Kalimantan Selatan</strong> © 2025 BALATKOP-UK Prov. Kalsel</p>
 				</div>
 			</div>
         </div>

@@ -11,7 +11,7 @@
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
 							<div class="dashboard_bar">
-                                Sub Kegiatan
+                                Dashboard
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
 				<div class="row page-titles">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item active"><a href="/admin/dashboard">SIJADIN</a></li>
-						<li class="breadcrumb-item">Sub Kegiatan</li>
+						<li class="breadcrumb-item">Dashboard</li>
 					</ol>
                 </div>
                 <!-- row -->
@@ -78,19 +78,16 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="basic-form">
-                                                <form action="{{ route('a.subkegiatan')}}" method="POST">
+                                                <form action="/admin/operator/store" method="POST">
                                                 @csrf
                                                 <div class="mb-3">
-                                                    <label class="form-label">Kode :</label>
-                                                    <input type="text" name="kodesubkegiatan" class="form-control input-default" required>
+                                                    <label class="form-label">Username :</label>
+                                                    <input type="text" name="username" class="form-control input-default" required>
                                                 </div>    
-                                                <div class="mb-3">
-                                                    <label class="form-label">Sub Kegiatan :</label>
-                                                    <input type="text" name="subkegiatan" class="form-control input-default" required>
-                                                </div> 
                                             </div>
                                         </div>
                                         <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Batal</button>
                                             <button type="submit" class="btn btn-primary">Simpan</button>
                                             </form>
                                         </div>
@@ -99,54 +96,7 @@
                             </div>
                             <!-- End Modal -->
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table id="example" class="display" style="min-width: 845px">
-                                        <thead>
-                                            <tr>
-                                                <th style="text-align:center;">NO.</th>
-                                                <th style="text-align:center;">KODE</th>
-                                                <th style="text-align:center;">SUB KEGIATAN</th>
-                                                <th style="text-align:center;">STATUS</th>
-                                                <th style="text-align:center;">AKSI</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach ($subkegiatan as $d)
-                                            <tr>
-                                                <td style="color: black; text-align:center;">{{ $loop->iteration }}</td>
-                                                <td style="color: black;">{{$d->kd_subkegiatan}}</td>
-                                                <td style="color: black;">{{$d->nm_subkegiatan}}</td>
-                                                @if ($d->status == '0')
-                                                        <td style="text-align:center;"><span class="badge light badge-warning">Nonaktif</span></td>
-                                                    @else
-                                                        <td style="text-align:center;"><span class="badge light badge-success">Aktif</span></td>
-                                                @endif
-                                                <td>
-                                                    <div class="dropdown">
-														<button type="button" class="btn btn-primary light sharp" data-bs-toggle="dropdown">
-															<svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"/><circle fill="#000000" cx="5" cy="12" r="2"/><circle fill="#000000" cx="12" cy="12" r="2"/><circle fill="#000000" cx="19" cy="12" r="2"/></g></svg>
-														</button>
-                                                        @csrf
-														<div class="dropdown-menu">
-															<a class="dropdown-item edit" href="#" data-id="{{Crypt::encrypt($d->id_subkegiatan)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
-															<a class="dropdown-item hapus" href="#" data-id="{{Crypt::encrypt($d->id_subkegiatan)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
-														</div>
-													</div>
-                                                </td>
-                                            @endforeach
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th style="text-align:center;">NO.</th>
-                                                <th style="text-align:center;">KODE</th>
-                                                <th style="text-align:center;">SUB KEGIATAN</th>
-                                                <th style="text-align:center;">STATUS</th>
-                                                <th style="text-align:center;">AKSI</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
+                                
                             </div>
                             <!-- Start EditModal -->
                             <div class="modal fade" id="modal-editobjek">
@@ -189,7 +139,7 @@
         var id_subkegiatan = $(this).attr('data-id');
         $.ajax({
                         type: 'POST',
-                        url: '/admin/sumberdana/subkegiatan/edit',
+                        url: '/admin/operator/edit',
                         cache: false,
                         data: {
                             _token: "{{ csrf_token() }}",
@@ -220,7 +170,7 @@
       confirmButtonText: "Ya, Hapus Saja!"
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location = "/admin/sumberdana/subkegiatan/"+id_subkegiatan+"/hapus"
+        window.location = "/admin/operator/"+id_subkegiatan+"/hapus"
         Swal.fire({
           title: "Data Berhasil Dihapus !",
           icon: "success"
@@ -245,7 +195,7 @@
       confirmButtonText: "Ya, Reset Saja!"
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location = "/admin/sumberdana/subkegiatan/"+id_subkegiatan+"/reset"
+        window.location = "/admin/operator/"+id_subkegiatan+"/reset"
       }
     });
     });
