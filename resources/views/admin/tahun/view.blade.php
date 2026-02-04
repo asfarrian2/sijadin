@@ -11,7 +11,7 @@
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
 							<div class="dashboard_bar">
-                                Sub Kegiatan
+                                Tahun Anggaran
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
 				<div class="row page-titles">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item active"><a href="/admin/dashboard">SIJADIN</a></li>
-						<li class="breadcrumb-item">Sub Kegiatan</li>
+						<li class="breadcrumb-item">Tahun Anggaran</li>
 					</ol>
                 </div>
                 <!-- row -->
@@ -78,16 +78,12 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="basic-form">
-                                                <form action="{{ route('a.subkegiatan')}}" method="POST">
+                                                <form action="{{ route('a.tahun')}}" method="POST">
                                                 @csrf
                                                 <div class="mb-3">
-                                                    <label class="form-label">Kode :</label>
-                                                    <input type="text" name="kodesubkegiatan" class="form-control input-default" required>
+                                                    <label class="form-label">Tahun Anggaran :</label>
+                                                    <input type="text" name="tahun" class="form-control input-default" required>
                                                 </div>    
-                                                <div class="mb-3">
-                                                    <label class="form-label">Sub Kegiatan :</label>
-                                                    <input type="text" name="subkegiatan" class="form-control input-default" required>
-                                                </div> 
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -104,18 +100,16 @@
                                         <thead>
                                             <tr>
                                                 <th style="text-align:center;">NO.</th>
-                                                <th style="text-align:center;">KODE</th>
-                                                <th style="text-align:center;">SUBKEGIATAN</th>
+                                                <th style="text-align:center;">TAHUN ANGGARAN</th>
                                                 <th style="text-align:center;">STATUS</th>
                                                 <th style="text-align:center;">AKSI</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ($subkegiatan as $d)
+                                        @foreach ($tahun as $d)
                                             <tr>
                                                 <td style="color: black; text-align:center;">{{ $loop->iteration }}</td>
-                                                <td style="color: black; text-align:center;">{{$d->kd_subkegiatan}}</td>
-                                                <td style="color: black;">{{$d->nm_subkegiatan}}</td>
+                                                <td style="color: black;">{{$d->tahun}}</td>
                                                 @if ($d->status == '0')
                                                         <td style="text-align:center;"><span class="badge light badge-warning">Nonaktif</span></td>
                                                     @else
@@ -127,14 +121,15 @@
 															<svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"/><circle fill="#000000" cx="5" cy="12" r="2"/><circle fill="#000000" cx="12" cy="12" r="2"/><circle fill="#000000" cx="19" cy="12" r="2"/></g></svg>
 														</button>
 														<div class="dropdown-menu">
-                                                            @csrf
+                                                            <a class="dropdown-item dpaadd" data-id="{{Crypt::encrypt($d->id_tahun)}}"> <i class="fa fa-plus color-muted"></i> Buat DPA</a>
+															 @csrf
                                                             @if ($d->status == '1')
-                                                            <a class="dropdown-item status" data-id="{{Crypt::encrypt($d->id_subkegiatan)}}"> <i class="fa fa-toggle-on color-muted"></i> Aktif</a>
+                                                            <a class="dropdown-item status" data-id="{{Crypt::encrypt($d->id_tahun)}}"> <i class="fa fa-toggle-on color-muted"></i> Aktif</a>
                                                             @else
-                                                            <a class="dropdown-item status" data-id="{{Crypt::encrypt($d->id_subkegiatan)}}"> <i class="fa fa-toggle-off color-muted"></i> Nonaktif</a>
+                                                            <a class="dropdown-item status" data-id="{{Crypt::encrypt($d->id_tahun)}}"> <i class="fa fa-toggle-off color-muted"></i> Nonaktif</a>
                                                             @endif
-															<a class="dropdown-item edit" data-id="{{Crypt::encrypt($d->id_subkegiatan)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
-															<a class="dropdown-item hapus" data-id="{{Crypt::encrypt($d->id_subkegiatan)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
+															<a class="dropdown-item edit" data-id="{{Crypt::encrypt($d->id_tahun)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
+															<a class="dropdown-item hapus" data-id="{{Crypt::encrypt($d->id_tahun)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
 														</div>
 													</div>
                                                 </td>
@@ -144,8 +139,7 @@
                                         <tfoot>
                                             <tr>
                                                 <th style="text-align:center;">NO.</th>
-                                                <th style="text-align:center;">KODE</th>
-                                                <th style="text-align:center;">SUBKEGIATAN</th>
+                                                <th style="text-align:center;">TAHUN ANGGARAN</th>
                                                 <th style="text-align:center;">STATUS</th>
                                                 <th style="text-align:center;">AKSI</th>
                                             </tr>
@@ -153,6 +147,25 @@
                                     </table>
                                 </div>
                             </div>
+                            <!-- Start EditModal -->
+                            <div class="modal fade" id="modal-tambahdpa">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title">Tambah DPA</h3>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" id="loadadddpa">
+                                            <div class="basic-form">
+                                            <!-- Form
+                                                        Edit -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Modal -->
                             <!-- Start EditModal -->
                             <div class="modal fade" id="modal-editobjek">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -191,14 +204,14 @@
     <!-- Button Edit SPJ -->
     <script>
     $('.edit').click(function(){
-        var id_subkegiatan = $(this).attr('data-id');
+        var id_tahun = $(this).attr('data-id');
         $.ajax({
                         type: 'POST',
-                        url: '/admin/sumberdana/subkegiatan/edit',
+                        url: '/admin/sumberdana/tahun/edit',
                         cache: false,
                         data: {
                             _token: "{{ csrf_token() }}",
-                            id_subkegiatan: id_subkegiatan
+                            id_tahun: id_tahun
                         },
                         success: function(respond) {
                             $("#loadeditform").html(respond);
@@ -211,10 +224,33 @@
     </script>
     <!-- END Button Edit SPJ -->
 
+    <!-- Button Edit SPJ -->
+    <script>
+    $('.dpaadd').click(function(){
+        var id_tahun = $(this).attr('data-id');
+        $.ajax({
+                        type: 'POST',
+                        url: '/admin/sumberdana/tahun/dpa',
+                        cache: false,
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            id_tahun: id_tahun
+                        },
+                        success: function(respond) {
+                            $("#loadadddpa").html(respond);
+                        }
+                    });
+         $("#modal-tambahdpa").modal("show");
+
+    });
+    var span = document.getElementsByClassName("close")[0];
+    </script>
+    <!-- END Button Edit SPJ -->
+
     <!-- Start Button Hapus -->
     <script>
     $('.hapus').click(function(){
-        var id_subkegiatan = $(this).attr('data-id');
+        var id_tahun = $(this).attr('data-id');
     Swal.fire({
       title: "Apakah Anda Yakin Data Ini Ingin Di Hapus ?",
       text: "Jika Ya Maka Data Akan Terhapus Permanen",
@@ -225,7 +261,7 @@
       confirmButtonText: "Ya, Hapus Saja!"
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location = "/admin/sumberdana/subkegiatan/hapus"+id_subkegiatan
+        window.location = "/admin/sumberdana/tahun/"+id_tahun+"/hapus"
         Swal.fire({
           title: "Data Berhasil Dihapus !",
           icon: "success"
@@ -239,7 +275,7 @@
 <!-- Button Status -->
 <script>
 $('.status').click(function(){
-    var id_subkegiatan = $(this).attr('data-id');
+    var id_tahun = $(this).attr('data-id');
 Swal.fire({
   title: "Apakah Anda Yakin Ingin Mengubah Status Data Ini ?",
   text: "Jika Ya Maka Status Data Akan Diubah",
@@ -250,13 +286,12 @@ Swal.fire({
   confirmButtonText: "Ya, Ubah Status!"
   }).then((result) => {
   if (result.isConfirmed) {
-    window.location = "/admin/sumberdana/subkegiatan/status"+id_subkegiatan
+    window.location = "/admin/sumberdana/subkegiatan/tahun"+id_tahun
     }
   });
 });
 </script>
 <!-- END Button Status -->
-
 
 
 

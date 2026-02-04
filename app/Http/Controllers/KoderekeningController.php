@@ -64,6 +64,67 @@ class KoderekeningController extends Controller
         return view('admin.koderekening.edit', compact('koderekening'));
 
     }
+
+    public function update(Request $request){
+
+        $id_rekening   = $request->id;
+        $id_rekening   = Crypt::decrypt($id_rekening);
+        $rekening      = $request->subkegiatan;
+        $koderekening  = $request->kodesubkegiatan;
+
+        $data       = [
+            'kd_rekening'    => $koderekening,
+            'nm_rekening'    => $rekening,
+        ];
+
+        $update = Koderekening::where('id_rekening', $id_rekening)->update($data);
+        if ($update) {
+            return Redirect::back()->with(['success' => 'Data Berhasil Diubah']);
+        } else {
+            return Redirect::back()->with(['warning' => 'Data Gagal Diubah']);
+        }
+        
+    }
+
+    public function status($id_rekening){
+
+        $id_rekening   = Crypt::decrypt($id_rekening);
+        $subkegiatan      = Koderekening::where('id_rekening', $id_rekening)->first();
+
+        $status     = $subkegiatan->status;
+
+        if($status == 0){
+            $data = [
+                'status' => '1'
+            ];
+        }else{
+            $data = [
+                'status' => '0'
+            ];
+        }
+
+        $update = Koderekening::where('id_rekening',$id_rekening)->update($data);
+
+        if ($update) {
+            return Redirect::back()->with(['success' => 'Status Data Berhasil Diubah']);
+        } else {
+            return Redirect::back()->with(['warning' => 'Status Data Gagal Diubah']);
+        }
+    }
+
+
+    public function hapus($id_rekening){
+
+        $id_rekening = Crypt::decrypt($id_rekening);
+
+        $delete = Koderekening::where('id_rekening',$id_rekening)->delete();
+
+        if ($delete) {
+            return Redirect::back()->with(['success' => 'Data Berhasil Dihapus']);
+        } else {
+            return Redirect::back()->with(['warning' => 'Data Gagal Dihapus']);
+        }
+    }
     
     
 }

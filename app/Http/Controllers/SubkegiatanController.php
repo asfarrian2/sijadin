@@ -66,7 +66,7 @@ class SubkegiatanController extends Controller
 
     }
 
-        public function update(Request $request){
+    public function update(Request $request){
 
         $id_subkegiatan   = $request->id;
         $id_subkegiatan   = Crypt::decrypt($id_subkegiatan);
@@ -87,7 +87,45 @@ class SubkegiatanController extends Controller
         
     }
 
+    public function status($id_subkegiatan){
 
+        $id_subkegiatan   = Crypt::decrypt($id_subkegiatan);
+        $subkegiatan      = Subkegiatan::where('id_subkegiatan', $id_subkegiatan)->first();
+
+        $status     = $subkegiatan->status;
+
+        if($status == 0){
+            $data = [
+                'status' => '1'
+            ];
+        }else{
+            $data = [
+                'status' => '0'
+            ];
+        }
+
+        $update = subkegiatan::where('id_subkegiatan',$id_subkegiatan)->update($data);
+
+        if ($update) {
+            return Redirect::back()->with(['success' => 'Status Data Berhasil Diubah']);
+        } else {
+            return Redirect::back()->with(['warning' => 'Status Data Gagal Diubah']);
+        }
+    }
+
+
+    public function hapus($id_subkegiatan){
+
+        $id_subkegiatan = Crypt::decrypt($id_subkegiatan);
+
+        $delete = Subkegiatan::where('id_subkegiatan',$id_subkegiatan)->delete();
+
+        if ($delete) {
+            return Redirect::back()->with(['success' => 'Data Berhasil Dihapus']);
+        } else {
+            return Redirect::back()->with(['warning' => 'Data Gagal Dihapus']);
+        }
+    }
 
     
 }

@@ -114,7 +114,7 @@
                                         @foreach ($koderekening as $d)
                                             <tr>
                                                 <td style="color: black; text-align:center;">{{ $loop->iteration }}</td>
-                                                <td style="color: black;">{{$d->kd_rekening}}</td>
+                                                <td style="color: black; text-align:center;">{{$d->kd_rekening}}</td>
                                                 <td style="color: black;">{{$d->nm_rekening}}</td>
                                                 @if ($d->status == '0')
                                                         <td style="text-align:center;"><span class="badge light badge-warning">Nonaktif</span></td>
