@@ -78,15 +78,15 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="basic-form">
-                                                <form action="{{ route('a.subkegiatan')}}" method="POST">
+                                                <form action="{{ route('a.koderekening')}}" method="POST">
                                                 @csrf
                                                 <div class="mb-3">
-                                                    <label class="form-label">Kode :</label>
-                                                    <input type="text" name="kodesubkegiatan" class="form-control input-default" required>
+                                                    <label class="form-label">Kode Rekening:</label>
+                                                    <input type="text" name="koderekening" class="form-control input-default" required>
                                                 </div>    
                                                 <div class="mb-3">
-                                                    <label class="form-label">Sub Kegiatan :</label>
-                                                    <input type="text" name="subkegiatan" class="form-control input-default" required>
+                                                    <label class="form-label">Nama Rekening :</label>
+                                                    <input type="text" name="rekening" class="form-control input-default" required>
                                                 </div> 
                                             </div>
                                         </div>
@@ -104,18 +104,18 @@
                                         <thead>
                                             <tr>
                                                 <th style="text-align:center;">NO.</th>
-                                                <th style="text-align:center;">KODE</th>
-                                                <th style="text-align:center;">SUBKEGIATAN</th>
+                                                <th style="text-align:center;">KODE REKENING</th>
+                                                <th style="text-align:center;">NAMA REKENING</th>
                                                 <th style="text-align:center;">STATUS</th>
                                                 <th style="text-align:center;">AKSI</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ($subkegiatan as $d)
+                                        @foreach ($koderekening as $d)
                                             <tr>
                                                 <td style="color: black; text-align:center;">{{ $loop->iteration }}</td>
-                                                <td style="color: black;">{{$d->kd_subkegiatan}}</td>
-                                                <td style="color: black;">{{$d->nm_subkegiatan}}</td>
+                                                <td style="color: black;">{{$d->kd_rekening}}</td>
+                                                <td style="color: black;">{{$d->nm_rekening}}</td>
                                                 @if ($d->status == '0')
                                                         <td style="text-align:center;"><span class="badge light badge-warning">Nonaktif</span></td>
                                                     @else
@@ -128,8 +128,8 @@
 														</button>
                                                         @csrf
 														<div class="dropdown-menu">
-															<a class="dropdown-item edit" href="#" data-id="{{Crypt::encrypt($d->id_subkegiatan)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
-															<a class="dropdown-item hapus" href="#" data-id="{{Crypt::encrypt($d->id_subkegiatan)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
+															<a class="dropdown-item edit" href="#" data-id="{{Crypt::encrypt($d->id_rekening)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
+															<a class="dropdown-item hapus" href="#" data-id="{{Crypt::encrypt($d->id_rekening)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
 														</div>
 													</div>
                                                 </td>
@@ -139,8 +139,8 @@
                                         <tfoot>
                                             <tr>
                                                 <th style="text-align:center;">NO.</th>
-                                                <th style="text-align:center;">KODE</th>
-                                                <th style="text-align:center;">SUBKEGIATAN</th>
+                                                <th style="text-align:center;">KODE REKENING</th>
+                                                <th style="text-align:center;">NAMA REKENING</th>
                                                 <th style="text-align:center;">STATUS</th>
                                                 <th style="text-align:center;">AKSI</th>
                                             </tr>
@@ -186,14 +186,14 @@
     <!-- Button Edit SPJ -->
     <script>
     $('.edit').click(function(){
-        var id_subkegiatan = $(this).attr('data-id');
+        var id_rekening = $(this).attr('data-id');
         $.ajax({
                         type: 'POST',
-                        url: '/admin/sumberdana/subkegiatan/edit',
+                        url: '/admin/sumberdana/koderekening/edit',
                         cache: false,
                         data: {
                             _token: "{{ csrf_token() }}",
-                            id_subkegiatan: id_subkegiatan
+                            id_rekening: id_rekening
                         },
                         success: function(respond) {
                             $("#loadeditform").html(respond);
@@ -209,7 +209,7 @@
     <!-- Start Button Hapus -->
     <script>
     $('.hapus').click(function(){
-        var id_subkegiatan = $(this).attr('data-id');
+        var id_rekening = $(this).attr('data-id');
     Swal.fire({
       title: "Apakah Anda Yakin Data Ini Ingin Di Hapus ?",
       text: "Jika Ya Maka Data Akan Terhapus Permanen",
@@ -220,7 +220,7 @@
       confirmButtonText: "Ya, Hapus Saja!"
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location = "/admin/sumberdana/subkegiatan/"+id_subkegiatan+"/hapus"
+        window.location = "/admin/sumberdana/koderekening/"+id_rekening+"/hapus"
         Swal.fire({
           title: "Data Berhasil Dihapus !",
           icon: "success"
@@ -234,7 +234,7 @@
     <!-- Start Button Reset PW -->
     <script>
     $('.reset').click(function(){
-        var id_subkegiatan = $(this).attr('data-id');
+        var id_rekening = $(this).attr('data-id');
     Swal.fire({
       title: "Apakah Anda Yakin untuk Melakukan Reset Password pada Akun Ini?",
       text: "Jika Ya, Maka Password Akun Ini Akan Direset",
@@ -245,7 +245,7 @@
       confirmButtonText: "Ya, Reset Saja!"
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location = "/admin/sumberdana/subkegiatan/"+id_subkegiatan+"/reset"
+        window.location = "/admin/sumberdana/koderekening/"+id_rekening+"/reset"
       }
     });
     });

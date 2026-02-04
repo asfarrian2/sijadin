@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KoderekeningController;
 use App\Http\Controllers\SubkegiatanController;
 use App\Models\Subkegiatan;
 use Illuminate\Support\Facades\Route;
@@ -25,3 +26,10 @@ Route::post('/admin/sumberdana/subkegiatan/store', [SubkegiatanController::class
 Route::post('/admin/sumberdana/subkegiatan/edit', [SubkegiatanController::class, 'edit']);
 Route::post('/admin/sumberdana/subkegiatan/update', [SubkegiatanController::class, 'update'])->name('u.subkegiatan');
 Route::get('/admin/sumberdana/subkegiatan/hapus{$id_subkegiatan}', [SubkegiatanController::class, 'hapus']);
+
+// Kode Rekening
+Route::get('/admin/sumberdana/koderekening', [KoderekeningController::class, 'view'])->name('koderekening');
+Route::post('/admin/sumberdana/koderekening/store', [KoderekeningController::class, 'store'])->name('a.koderekening');
+Route::post('/admin/sumberdana/koderekening/edit', [KoderekeningController::class, 'edit']);
+Route::post('/admin/sumberdana/koderekening/update', [KoderekeningController::class, 'update'])->name('u.koderekening');
+Route::get('/admin/sumberdana/koderekening/hapus{$id_rekening}', [KoderekeningController::class, 'hapus']);

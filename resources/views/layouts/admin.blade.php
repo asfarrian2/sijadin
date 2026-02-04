@@ -115,7 +115,8 @@
 						</a>
                         <ul aria-expanded="false" @if(Request::is('admin/sumberdana*')) class="mm-collapse mm-show" @endif>
                             <li @if(Request::is('admin/sumberdana/subkegiatan*')) class="mm-active" @endif><a href="{{ Route('subkegiatan')}}" @if(Request::is('admin/sumberdana/subkegiatan*')) class="mm-active" @endif>Sub Kegiatan</a></li>
-                            <li @if(Request::is('admin/sumberdana/koderekening*')) class="mm-active" @endif><a href="/admin/sumberdana/koderekening" @if(Request::is('admin/sumberdana/koderekening*')) class="mm-active" @endif>Kode Rekening</a></li>
+                            <li @if(Request::is('admin/sumberdana/koderekening*')) class="mm-active" @endif><a href="{{ Route('koderekening')}}" @if(Request::is('admin/sumberdana/koderekening*')) class="mm-active" @endif>Kode Rekening</a></li>
+                            <li @if(Request::is('admin/sumberdana/tahunanggaran*')) class="mm-active" @endif><a href="/admin/sumberdana/tahunanggaran" @if(Request::is('admin/sumberdana/tahunanggaran*')) class="mm-active" @endif>Tahun Anggaran</a></li>
                             <li @if(Request::is('admin/sumberdana/anggaran*')) class="mm-active" @endif><a href="/admin/sumberdana/anggaran" @if(Request::is('admin/sumberdana/anggaran*')) class="mm-active" @endif>Anggaran</a></li>
                         </ul>
 					</li>
