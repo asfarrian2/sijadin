@@ -113,17 +113,22 @@ class TahunController extends Controller
 
 
     public function hapus($id_tahun){
-
         $id_tahun = Crypt::decrypt($id_tahun);
-
-        $delete = Tahun::where('id_tahun',$id_tahun)->delete();
-
+        
+        // Cek apakah ada DPA yang terkait dengan id_tahun
+        if (Dpa::where('id_tahun', $id_tahun)->exists()) {
+            return Redirect::back()->with(['warning' => 'Data Tahun Gagal Dihapus karena masih terkait dengan DPA']);
+        }
+        
+        // Jika tidak ada DPA yang terkait, maka hapus data tahun
+        $delete = Tahun::where('id_tahun', $id_tahun)->delete();
         if ($delete) {
-            return Redirect::back()->with(['success' => 'Data Berhasil Dihapus']);
+            return Redirect::back()->with(['success' => 'Data Tahun Berhasil Dihapus']);
         } else {
-            return Redirect::back()->with(['warning' => 'Data Gagal Dihapus']);
+            return Redirect::back()->with(['warning' => 'Data Tahun Gagal Dihapus']);
         }
     }
+
 
     //Tambhkan DPA Data
     public function add_dpa(Request $request){
@@ -137,7 +142,7 @@ class TahunController extends Controller
 
     }
 
-        public function store_dpa(Request $request){
+    public function store_dpa(Request $request){
 
         $id_tahun   = $request->tahun;
         $id_tahun   = Crypt::decrypt($id_tahun);
@@ -149,7 +154,7 @@ class TahunController extends Controller
         if($id_dpa == null){
             $nomorurut = "00001";
         }else{
-            $nomorurut = substr($id_tahun->id_tahun, 4, 5) + 1;
+            $nomorurut = substr($id_dpa->id_dpa, 4, 5) + 1;
             $nomorurut = str_pad($nomorurut, 5, "0", STR_PAD_LEFT);
         }
         $id=$kodeobjek.$nomorurut;
@@ -171,6 +176,52 @@ class TahunController extends Controller
             return Redirect::back()->with(['warning' => 'Data Gagal Disimpan.']);
         }
 
+    }
+
+    //Tampilkan Halaman Edit Data
+    public function edit_dpa(Request $request){
+
+        $id_dpa   = $request->id_dpa;
+        $id_dpa   = Crypt::decrypt($id_dpa);
+
+        $dpa      = Dpa::where('id_dpa', $id_dpa)->first();
+
+        return view('admin.tahun.editdpa', compact('dpa'));
+
+    }
+
+    public function update_dpa(Request $request){
+
+        $id_dpa   = $request->id;
+        $id_dpa   = Crypt::decrypt($id_dpa);
+        $dpa      = $request->dpa;
+        $tanggal  = $request->tanggal;
+
+        $data = [
+            'dpa'    => $dpa,
+            'tgl'    => $tanggal,
+        ];
+
+        $update = Dpa::where('id_dpa', $id_dpa)->update($data);
+        if ($update) {
+            return Redirect::back()->with(['success' => 'Data Berhasil Diubah']);
+        } else {
+            return Redirect::back()->with(['warning' => 'Data Gagal Diubah']);
+        }
+        
+    }
+
+    public function hapus_dpa($id_dpa){
+
+        $id_dpa = Crypt::decrypt($id_dpa);
+
+        $delete = Dpa::where('id_dpa',$id_dpa)->delete();
+
+        if ($delete) {
+            return Redirect::back()->with(['success' => 'Data Berhasil Dihapus']);
+        } else {
+            return Redirect::back()->with(['warning' => 'Data Gagal Dihapus']);
+        }
     }
 
 

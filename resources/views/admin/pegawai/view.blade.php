@@ -11,7 +11,7 @@
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
 							<div class="dashboard_bar">
-                                Tahun Anggaran
+                                Pegawai
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
 				<div class="row page-titles">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item active"><a href="/admin/dashboard">SIJADIN</a></li>
-						<li class="breadcrumb-item">Tahun Anggaran</li>
+						<li class="breadcrumb-item">Pegawai</li>
 					</ol>
                 </div>
                 <!-- row -->
@@ -72,17 +72,29 @@
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h3 class="modal-title">Tambah Data</h3>
+                                            <h3 class="modal-title">Tambah Pegawai</h3>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal">
                                             </button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="basic-form">
-                                                <form action="{{ route('a.tahun')}}" method="POST">
+                                                <form action="{{ route('a.pegawai')}}" method="POST">
                                                 @csrf
                                                 <div class="mb-3">
-                                                    <label class="form-label">Tahun Anggaran :</label>
-                                                    <input type="number" name="tahun" class="form-control input-default" required>
+                                                    <label class="form-label">Nama :</label>
+                                                    <input type="text" name="nama" class="form-control input-default" required>
+                                                </div>
+                                                 <div class="mb-3">
+                                                    <label class="form-label">NIP :</label>
+                                                    <input type="text" name="nip" class="form-control input-default" required>
+                                                </div>
+                                                 <div class="mb-3">
+                                                    <label class="form-label">Pangkat / Golongan :</label>
+                                                    <input type="text" name="pangkgol" class="form-control input-default">
+                                                </div>
+                                                 <div class="mb-3">
+                                                    <label class="form-label">Jabatan :</label>
+                                                    <input type="text" name="jabatan" class="form-control input-default" required>
                                                 </div>    
                                             </div>
                                         </div>
@@ -100,23 +112,18 @@
                                         <thead>
                                             <tr>
                                                 <th style="text-align:center;">NO.</th>
-                                                <th style="text-align:center;">TAHUN ANGGARAN</th>
+                                                <th style="text-align:center;">NAMA / NIP <br>PANGKAT / GOL</th>
+                                                <th style="text-align:center;">JABATAN</th>
                                                 <th style="text-align:center;">STATUS</th>
                                                 <th style="text-align:center;">AKSI</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ($tahun as $d)
+                                        @foreach ($pegawai as $d)
                                             <tr>
                                                 <td style="color: black; text-align:center;">{{ $loop->iteration }}</td>
-                                                <td style="color: black;">{{$d->tahun}}<br>
-                                                    @foreach ($d->dpa as $r )
-                                                    - {{ $r->dpa }} Tgl : {{ $r->tgl}}
-                                                     &nbsp;<a type="button" href="/admin/sumberdana/tahun/dpa/rincian{{Crypt::encrypt($r->id_dpa)}}"><i class="fa fa-list color-muted"></i> Rincian</a>
-                                                     &nbsp;<a type="button" class="dpaedit" data-id="{{Crypt::encrypt($r->id_dpa)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
-                                                     &nbsp;<a type="button" class="hapusdpa" data-id="{{Crypt::encrypt($r->id_dpa)}}"> <i class="fa fa-trash color-muted"></i> Hapus</a><br>
-                                                    @endforeach
-                                                </td>
+                                                <td style="color: black;"><b>{{ $d->nama }}</b><br>{{ $d->pangkgol}}<br>{{ $d->nip}}</td>
+                                                <td style="color: black; text-align:center;">{{ $d->jabatan }}</td>
                                                 @if ($d->status == '0')
                                                         <td style="text-align:center;"><span class="badge light badge-warning">Nonaktif</span></td>
                                                     @else
@@ -128,15 +135,15 @@
 															<svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><rect x="0" y="0" width="24" height="24"/><circle fill="#000000" cx="5" cy="12" r="2"/><circle fill="#000000" cx="12" cy="12" r="2"/><circle fill="#000000" cx="19" cy="12" r="2"/></g></svg>
 														</button>
 														<div class="dropdown-menu">
-                                                            <a type="button" class="dropdown-item dpaadd" data-id="{{Crypt::encrypt($d->id_tahun)}}"> <i class="fa fa-plus color-muted"></i> Buat DPA</a>
+                                                            <a type="button" class="dropdown-item dpaadd" data-id="{{Crypt::encrypt($d->id_pegawai)}}"> <i class="fa fa-plus color-muted"></i> Buat DPA</a>
 															 @csrf
                                                             @if ($d->status == '1')
-                                                            <a type="button" class="dropdown-item status" data-id="{{Crypt::encrypt($d->id_tahun)}}"> <i class="fa fa-toggle-on color-muted"></i> Aktif</a>
+                                                            <a type="button" class="dropdown-item status" data-id="{{Crypt::encrypt($d->id_pegawai)}}"> <i class="fa fa-toggle-on color-muted"></i> Aktif</a>
                                                             @else
-                                                            <a type="button" class="dropdown-item status" data-id="{{Crypt::encrypt($d->id_tahun)}}"> <i class="fa fa-toggle-off color-muted"></i> Nonaktif</a>
+                                                            <a type="button" class="dropdown-item status" data-id="{{Crypt::encrypt($d->id_pegawai)}}"> <i class="fa fa-toggle-off color-muted"></i> Nonaktif</a>
                                                             @endif
-															<a type="button" class="dropdown-item edit" data-id="{{Crypt::encrypt($d->id_tahun)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
-															<a type="button" class="dropdown-item hapus" data-id="{{Crypt::encrypt($d->id_tahun)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
+															<a type="button" class="dropdown-item edit" data-id="{{Crypt::encrypt($d->id_pegawai)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
+															<a type="button" class="dropdown-item hapus" data-id="{{Crypt::encrypt($d->id_pegawai)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
 														</div>
 													</div>
                                                 </td>
@@ -146,7 +153,8 @@
                                         <tfoot>
                                             <tr>
                                                 <th style="text-align:center;">NO.</th>
-                                                <th style="text-align:center;">TAHUN ANGGARAN</th>
+                                                <th style="text-align:center;">NAMA / NIP <br>PANGKAT / GOL</th>
+                                                <th style="text-align:center;">JABATAN</th>
                                                 <th style="text-align:center;">STATUS</th>
                                                 <th style="text-align:center;">AKSI</th>
                                             </tr>
@@ -154,25 +162,6 @@
                                     </table>
                                 </div>
                             </div>
-                            <!-- Start EditModal -->
-                            <div class="modal fade" id="modal-tambahdpa">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h3 class="modal-title">Tambah DPA</h3>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal">
-                                            </button>
-                                        </div>
-                                        <div class="modal-body" id="loadadddpa">
-                                            <div class="basic-form">
-                                            <!-- Form
-                                                        Edit -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Modal -->
                             <!-- Start EditModal -->
                             <div class="modal fade" id="modal-editobjek">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -183,25 +172,6 @@
                                             </button>
                                         </div>
                                         <div class="modal-body" id="loadeditform">
-                                            <div class="basic-form">
-                                            <!-- Form
-                                                        Edit -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Modal -->
-                            <!-- Start EditModal -->
-                            <div class="modal fade" id="modal-editdpa">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h3 class="modal-title">Edit DPA</h3>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal">
-                                            </button>
-                                        </div>
-                                        <div class="modal-body" id="loadeditdpa">
                                             <div class="basic-form">
                                             <!-- Form
                                                         Edit -->
@@ -227,135 +197,59 @@
     <script src="{{asset ('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{asset ('assets/js/plugins-init/datatables.init.js') }}"></script>
 
-<!-- Button Edit Tahun -->
+<!-- Button Edit pegawai -->
 <script>
-$('.edit').click(function(){
-    var id_tahun = $(this).attr('data-id');
+$(document).on('click', '.edit', function(){
+    var id_pegawai = $(this).attr('data-id');
     $.ajax({
-                    type: 'POST',
-                    url: '/admin/sumberdana/tahun/edit',
-                    cache: false,
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        id_tahun: id_tahun
-                    },
-                    success: function(respond) {
-                        $("#loadeditform").html(respond);
-                    }
-                });
-     $("#modal-editobjek").modal("show");
+        type: 'POST',
+        url: '/admin/pegawai/edit',
+        cache: false,
+        data: {
+            _token: "{{ csrf_token() }}",
+            id_pegawai: id_pegawai
+        },
+        success: function(respond) {
+            $("#loadeditform").html(respond);
+        }
+    });
+    $("#modal-editobjek").modal("show");
 });
-var span = document.getElementsByClassName("close")[0];
-</script>
-<!-- END Button Edit Tahun -->
 
-<!-- Button Tambah DPA -->
-<script>
-$('.dpaadd').click(function(){
-    var id_tahun = $(this).attr('data-id');
-    $.ajax({
-                    type: 'POST',
-                    url: '/admin/sumberdana/tahun/dpa',
-                    cache: false,
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        id_tahun: id_tahun
-                    },
-                    success: function(respond) {
-                        $("#loadadddpa").html(respond);
-                    }
-                });
-     $("#modal-tambahdpa").modal("show");
+$(document).on('click', '.hapus', function(){
+    var id_pegawai = $(this).attr('data-id');
+    Swal.fire({
+        title: "Apakah Anda Yakin Data Ini Ingin Di Hapus ?",
+        text: "Jika Ya Maka Data Akan Terhapus Permanen",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, Hapus Saja!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location = "/admin/pegawai/hapus"+id_pegawai
+        }
+    });
 });
-var span = document.getElementsByClassName("close")[0];
-</script>
-<!-- END Button Tambah DPA -->
 
-<!-- Button Edit DPA -->
-<script>
-$('.dpaedit').click(function(){
-    var id_dpa = $(this).attr('data-id');
-    $.ajax({
-                    type: 'POST',
-                    url: '/admin/sumberdana/tahun/dpa/edit',
-                    cache: false,
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        id_dpa: id_dpa
-                    },
-                    success: function(respond) {
-                        $("#loadeditdpa").html(respond);
-                    }
-                });
-     $("#modal-editdpa").modal("show");
-});
-var span = document.getElementsByClassName("close")[0];
-</script>
-<!-- END Button Edit DPA -->
-
-<!-- Start Button Hapus -->
-<script>
-$('.hapus').click(function(){
-    var id_tahun = $(this).attr('data-id');
-Swal.fire({
-  title: "Apakah Anda Yakin Data Ini Ingin Di Hapus ?",
-  text: "Jika Ya Maka Data Akan Terhapus Permanen",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonColor: "#3085d6",
-  cancelButtonColor: "#d33",
-  confirmButtonText: "Ya, Hapus Saja!"
-}).then((result) => {
-  if (result.isConfirmed) {
-    window.location = "/admin/sumberdana/tahun/hapus"+id_tahun
-  }
-});
+$(document).on('click', '.status', function(){
+    var id_pegawai = $(this).attr('data-id');
+    Swal.fire({
+        title: "Apakah Anda Yakin Ingin Mengubah Status Data Ini ?",
+        text: "Jika Ya Maka Status Data Akan Diubah",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, Ubah Status!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location = "/admin/pegawai/status"+id_pegawai
+        }
+    });
 });
 </script>
-<!-- End Button Hapus -->
-
-<!-- Start Button Hapus -->
-<script>
-$('.hapusdpa').click(function(){
-    var id_dpa = $(this).attr('data-id');
-Swal.fire({
-  title: "Apakah Anda Yakin Data Ini Ingin Di Hapus ?",
-  text: "Jika Ya Maka Data Akan Terhapus Permanen",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonColor: "#3085d6",
-  cancelButtonColor: "#d33",
-  confirmButtonText: "Ya, Hapus Saja!"
-}).then((result) => {
-  if (result.isConfirmed) {
-    window.location = "/admin/sumberdana/tahun/dpa/hapus"+id_dpa
-  }
-});
-});
-</script>
-<!-- End Button Hapus -->
-
-<!-- Button Status -->
-<script>
-$('.status').click(function(){
-    var id_tahun = $(this).attr('data-id');
-Swal.fire({
-  title: "Apakah Anda Yakin Ingin Mengubah Status Data Ini ?",
-  text: "Jika Ya Maka Status Data Akan Diubah",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonColor: "#3085d6",
-  cancelButtonColor: "#d33",
-  confirmButtonText: "Ya, Ubah Status!"
-  }).then((result) => {
-  if (result.isConfirmed) {
-    window.location = "/admin/sumberdana/tahun/status"+id_tahun
-    }
-  });
-});
-</script>
-<!-- END Button Status -->
-
-
+<!-- END Button Edit pegawai -->
 
 @endpush

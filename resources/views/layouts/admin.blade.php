@@ -63,8 +63,8 @@
         ***********************************-->
         <div class="nav-header">
             <a href="/admin/dashboardAll" class="brand-logo">
-                <img src="{{asset ('assets/images/logo-utama.png') }}">
-                <img src="{{asset ('assets/images/logo-text-3.png') }}" class="brand-title" width="124px" height="33px">
+                <img src="{{asset ('assets/images/logo-utama.png') }}" width="80px">
+                <img src="{{asset ('assets/images/logo-text-3.png') }}" class="brand-title" width="90px">
             </a>
             <div class="nav-control">
                 <div class="hamburger">
@@ -103,66 +103,70 @@
 							</a>
 						</div>
 					</li>
+                    <div class="copyright">
+					<p><strong>Home</strong></p>
+				    </div>
                     <li>
                         <a class="ai-icon" href="javascript:void()" aria-expanded="false">
 							<i class="flaticon-025-dashboard"></i>
 							<span class="nav-text">Dashboard</span>
 						</a>
                     </li>
+                    <div class="copyright">
+                    <p><strong>Master</strong></p>
+                    </div>
+                    <li><a href="{{ Route('pegawai')}}" class="ai-icon" aria-expanded="false"  @if(Request::is('admin/pegawai*')) style="background-color: #eefaf9;" @endif>
+						<i class="flaticon-381-user-8"></i>
+							<span class="nav-text">Pegawai</span>
+						</a>
+                    </li>
                     <li><a href="javascript:void()" class="has-arrow ai-icon" aria-expanded="false"  @if(Request::is('admin/sumberdana*')) style="background-color: #eefaf9;" @endif>
-							<i class="flaticon-381-calculator"  @if(Request::is('admin/sumberdana*')) style="color: #5bcfc5;" @endif></i>
+							<i class="flaticon-381-notebook-1"  @if(Request::is('admin/sumberdana*')) style="color: #5bcfc5;" @endif></i>
 							<span class="nav-text">Sumber Dana</span>
 						</a>
                         <ul aria-expanded="false" @if(Request::is('admin/sumberdana*')) class="mm-collapse mm-show" @endif>
                             <li @if(Request::is('admin/sumberdana/subkegiatan*')) class="mm-active" @endif><a href="{{ Route('subkegiatan')}}" @if(Request::is('admin/sumberdana/subkegiatan*')) class="mm-active" @endif>Sub Kegiatan</a></li>
                             <li @if(Request::is('admin/sumberdana/koderekening*')) class="mm-active" @endif><a href="{{ Route('koderekening')}}" @if(Request::is('admin/sumberdana/koderekening*')) class="mm-active" @endif>Kode Rekening</a></li>
-                            <li @if(Request::is('admin/sumberdana/tahun*')) class="mm-active" @endif><a href="{{ Route('tahun')}}" @if(Request::is('admin/sumberdana/tahun*')) class="mm-active" @endif>Tahun Anggaran</a></li>
-                            <li @if(Request::is('admin/sumberdana/anggaran*')) class="mm-active" @endif><a href="/admin/sumberdana/anggaran" @if(Request::is('admin/sumberdana/anggaran*')) class="mm-active" @endif>Anggaran</a></li>
+                            <li @if(Request::is('admin/sumberdana/tahun*')) class="mm-active" @endif><a href="{{ Route('tahun')}}" @if(Request::is('admin/sumberdana/tahun*')) class="mm-active" @endif>Anggaran</a></li>
                         </ul>
 					</li>
-                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-							<i class="flaticon-043-menu"></i>
-							<span class="nav-text">Master Data</span>
+                    <div class="copyright">
+                    <p><strong>Entry</strong></p>
+                    </div>
+                    <li><a class="ai-icon" href="/perjalanandinas" aria-expanded="false">
+							<i class="flaticon-381-location-3"></i>
+							<span class="nav-text">Perjalanan Dinas</span>
 						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="/admin/jenisretribusi">Jenis Retribusi</a></li>
-                            <li><a href="/admin/subretribusi">Sub Retribusi</a></li>
-                            <li><a href="/admin/objekretribusi">Objek Retribusi</a></li>
-                        </ul>
                     </li>
-                    <li><a href="/admin/agency" class="ai-icon" aria-expanded="false">
-							<i class="flaticon-093-waving"></i>
-							<span class="nav-text">SKPD/UPTD</span>
-						</a>
-					</li>
-                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-						<i class="flaticon-381-user-8"></i>
-							<span class="nav-text">Akun</span>
-						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="/admin/operator">Operator</a></li>
-							<li><a href="./post-details.html">User</a></li>
-                        </ul>
-                    </li>
-                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-						<i class="flaticon-060-on"></i>
-							<span class="nav-text">Konfigurasi Menu</span>
-						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="/admin/menuanggaran">Anggaran</a></li>
-							<li><a href="./post-details.html">Bulanan</a></li>
-                        </ul>
-                    </li>
+                    <div class="copyright">
+                    <p><strong>Report</strong></p>
+                    </div>
                     <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
 							<i class="flaticon-072-printer"></i>
 							<span class="nav-text">Laporan</span>
 						</a>
                         <ul aria-expanded="false">
-                            <li><a href="/admin/laporan/target">Target</a></li>
-                            <li><a href="/admin/laporan/realisasi">Realisasi</a></li>
-                            <li><a href="/admin/laporan/skpduptd">SKPD/UPTD</a></li>
-                            <li><a href="/admin/laporanobjekretribusi">Objek Retribusi</a></li>
+                            <li><a href="/admin/laporan/target">Rekapitulasi SPT</a></li>
+                            <li><a href="/admin/laporan/realisasi">Rekapitulasi SPPD</a></li>
+                            <li><a href="/admin/laporan/skpduptd">Realisasi Perjalanan Dinas</a></li>
                         </ul>
+                    </li>
+                    <div class="copyright">
+                    <p><strong>Manage</strong></p>
+                    </div>
+                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+							<i class="flaticon-381-user-7"></i>
+							<span class="nav-text">Akun</span>
+						</a>
+                        <ul aria-expanded="false">
+                            <li><a href="/admin/jenisretribusi">Admin</a></li>
+                            <li><a href="/admin/subretribusi">User</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="ai-icon" href="javascript:void()" aria-expanded="false">
+						<i class="flaticon-060-on"></i>
+							<span class="nav-text">Informasi</span>
+						</a>
                     </li>
                 </ul>
 				<div class="copyright">
