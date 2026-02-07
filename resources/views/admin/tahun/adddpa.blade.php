@@ -1,7 +1,7 @@
          <form action="{{ Route('a.dpa')}}"  method="POST" enctype="multipart/form-data">
          @csrf
              <div class="mb-3">
-                 <label class="form-label">Nama DPA :</label>
+                 <label class="form-label">Nomor DPA :</label>
                  <input type="hidden" name="tahun" value="{{ Crypt::encrypt($tahun->id_tahun) }}" class="form-control input-default" required>
                  <input type="text" name="dpa" class="form-control input-default" required>
              </div>

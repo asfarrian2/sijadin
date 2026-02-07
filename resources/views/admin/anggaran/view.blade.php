@@ -86,7 +86,7 @@
                                                     <input type="hidden" name="dpa" value="{{ Crypt::encrypt($id_dpa) }}" class="form-control input-default" required>
                                                 <div class="mb-3">
                                                     <label class="form-label">Sub Kegiatan :</label>
-                                                    <select class="default-select form-control wide" name="subkegiatan" >
+                                                    <select class="input-default form-control" name="subkegiatan" required>
                                                     <option value="">Pilih Sub Kegiatan</option>
                                                     @foreach ($subkegiatan as $d)
                                                     <option value="{{ $d->id_subkegiatan }}">{{$d->nm_subkegiatan }}</option>
@@ -95,7 +95,7 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Kode Rekening :</label>
-                                                    <select class="default-select form-control wide" name="koderekening" >
+                                                    <select class="input-default form-control" name="koderekening" required>
                                                     <option value="">Pilih Kode Rekening</option>
                                                     @foreach ($koderekening as $d)
                                                     <option value="{{ $d->id_rekening }}"> {{$d->nm_rekening }} </option>
@@ -104,7 +104,7 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">PPTK :</label>
-                                                    <select class="default-select form-control wide" name="pegawai" >
+                                                    <select class="input-default form-control" name="pegawai" required>
                                                     <option selected value="">Pilih PPTK</option>
                                                     @foreach ($pegawai as $d)
                                                     <option value="{{ $d->id_pegawai }}"> {{$d->nip }} - {{$d->nama }} </option>
@@ -112,8 +112,8 @@
                                                     </select>
                                                 </div>
                                                  <div class="mb-3">
-                                                    <label class="form-label">Pagu :</label>
-                                                    <input type="number" name="pagu" class="form-control input-default" required>
+                                                    <label class="form-label">Pagu (Rp) :</label>
+                                                    <input type="text" name="pagu" class="form-control input-default pagu" required>
                                                 </div>    
                                             </div>
                                         </div>
@@ -145,9 +145,10 @@
                                                     @foreach ($d->anggaran as $anggaran)
                                                         <p class="text mb-1 mt-1" style="color: green">- {{ $anggaran->subkegiatan->kd_subkegiatan }} {{ $anggaran->subkegiatan->nm_subkegiatan }}</p>
                                                         <p class="text mb-1"> {{$anggaran->koderekening->kd_rekening}} {{ $anggaran->koderekening->nm_rekening }} </p>
-                                                        <p class="text mb-1"> Nilai : Rp {{$anggaran->pagu}}</p> &nbsp;
-                                                        &nbsp;<a type="button" class="dpaedit" data-id="{{Crypt::encrypt($d->id_anggaran)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
-                                                        &nbsp; &nbsp;<a type="button" class="hapusdpa mb-3" data-id="{{Crypt::encrypt($d->id_anggaran)}}"> <i class="fa fa-trash color-muted"></i> Hapus</a><br>
+                                                        <p class="text mb-1"> Nilai : Rp {{ number_format($anggaran->pagu, 0, ',', '.') }},-</p>&nbsp;
+                                                        @csrf
+                                                        &nbsp;<a type="button" class="editr" data-id="{{Crypt::encrypt($anggaran->id_anggaran)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
+                                                        &nbsp; &nbsp;<a type="button" class="hapusr mb-3" data-id="{{Crypt::encrypt($anggaran->id_anggaran)}}"> <i class="fa fa-trash color-muted"></i> Hapus</a><br>
                                                     @endforeach
                                                 </td>
                                                 <td>
@@ -157,8 +158,7 @@
 														</button>
 														<div class="dropdown-menu">
 															 @csrf
-															<a type="button" class="dropdown-item edit" data-id="{{Crypt::encrypt($d->id_anggaran)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
-															<a type="button" class="dropdown-item hapus" data-id="{{Crypt::encrypt($d->id_anggaran)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
+															<a type="button" class="dropdown-item edit" data-dpa="{{Crypt::encrypt($id_dpa)}}" data-pegawai="{{Crypt::encrypt($d->id_pegawai)}}"> <i class="fa fa-pencil color-muted"></i> Edit PPTK</a>
 														</div>
 													</div>
                                                 </td>
@@ -195,6 +195,25 @@
                                 </div>
                             </div>
                             <!-- End Modal -->
+                            <!-- Start EditModal -->
+                            <div class="modal fade" id="modal-editr">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title">Edit Pagu</h3>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" id="loadeditr">
+                                            <div class="basic-form">
+                                            <!-- Form
+                                                        Edit -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Modal -->
                         </div>
                     </div>
                 </div>
@@ -210,18 +229,29 @@
     <!-- Datatable -->
     <script src="{{asset ('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{asset ('assets/js/plugins-init/datatables.init.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
+    <script>
+    $(document).ready(function(){
+        $('.pagu').mask("#.##0", {
+            reverse:true
+        });
+    });
+    </script>
 <!-- Button Edit pegawai -->
 <script>
+
 $(document).on('click', '.edit', function(){
-    var id_anggaran = $(this).attr('data-id');
+    var id_pegawai = $(this).attr('data-pegawai');
+    var id_dpa = $(this).attr('data-dpa');
     $.ajax({
         type: 'POST',
-        url: '/admin/pegawai/edit',
+        url: '/admin/sumberdana/tahun/dpa/pptk/edit',
         cache: false,
         data: {
             _token: "{{ csrf_token() }}",
-            id_anggaran: id_anggaran
+            id_pegawai: id_pegawai,
+            id_dpa: id_dpa
         },
         success: function(respond) {
             $("#loadeditform").html(respond);
@@ -230,7 +260,27 @@ $(document).on('click', '.edit', function(){
     $("#modal-editobjek").modal("show");
 });
 
-$(document).on('click', '.hapus', function(){
+$(document).on('click', '.editr', function(){
+    var id_anggaran = $(this).attr('data-id');
+    $.ajax({
+        type: 'POST',
+        url: '/admin/sumberdana/tahun/dpa/rincian/edit',
+        cache: false,
+        data: {
+            _token: "{{ csrf_token() }}",
+            id_anggaran: id_anggaran
+        },
+        success: function(respond) {
+            $("#loadeditr").html(respond);
+            $('.pagu').mask("#.##0", {
+            reverse:true
+             });
+        }
+    });
+    $("#modal-editr").modal("show");
+});
+
+$(document).on('click', '.hapusr', function(){
     var id_anggaran = $(this).attr('data-id');
     Swal.fire({
         title: "Apakah Anda Yakin Data Ini Ingin Di Hapus ?",
@@ -242,7 +292,7 @@ $(document).on('click', '.hapus', function(){
         confirmButtonText: "Ya, Hapus Saja!"
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location = "/admin/pegawai/hapus"+id_anggaran
+            window.location = "/admin/sumberdana/tahun/dpa/rincian/hapus/"+id_anggaran
         }
     });
 });

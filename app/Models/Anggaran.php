@@ -12,7 +12,8 @@ use App\Models\Koderekening;
 class Anggaran extends Model
 {
     protected $table='tb_anggaran';
-    protected $fillable = ['id_anggaran', 'id_dpa', 'id_subkegiatan', 'id_rekening', 'id_pegawai', 'pagu', 'status'];
+    
+    protected $fillable = ['id_anggaran', 'id_dpa', 'id_subkegiatan', 'id_rekening', 'id_pegawai', 'pagu'];
 
      public function pegawai()
     {

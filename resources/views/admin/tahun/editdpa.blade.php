@@ -6,7 +6,7 @@
                  <input type="text" name="dpa" value="{{ $dpa->dpa }}" class="form-control input-default" required>
              </div>
              <div class="mb-3">
-                 <label class="form-label">Nomor DPA :</label>
+                 <label class="form-label">Tanggal DPA :</label>
                  <input type="date" name="tanggal" value="{{ $dpa->tgl }}" class="form-control input-default" required>
              </div>
         </div>

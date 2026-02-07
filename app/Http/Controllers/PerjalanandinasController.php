@@ -11,21 +11,21 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Koderekening;
+use App\Models\Perjalanandinas;
 use App\Models\Anggaran;
 
-class KoderekeningController extends Controller
+class PerjalanandinasController extends Controller
 {
-    public function view(){
+    public function view_admin(){
 
-        $koderekening = Koderekening::all();
+        $perjadin = Perjalanandinas::all();
 
-        return view('admin.koderekening.view', compact('koderekening'));
+        return view('admin.perjadin.view', compact('perjadin'));
     }
 
     public function store(Request $request){
 
-        $id_rekening = Koderekening::latest('id_rekening')->first();
+        $id_rekening = Perjalanandinas::latest('id_rekening')->first();
 
         $kodeobjek ="rek";
 
@@ -37,16 +37,16 @@ class KoderekeningController extends Controller
         }
         $id=$kodeobjek.$nomorurut;
 
-        $koderekening = $request->koderekening;
+        $perjadin = $request->perjadin;
         $rekening     = $request->rekening;
 
         $data = [
             'id_rekening'    => $id,
-            'kd_rekening'    => $koderekening,
+            'kd_rekening'    => $perjadin,
             'nm_rekening'    => $rekening,
             'status'         => '1'
         ];
-        $simpan = Koderekening::create($data);
+        $simpan = Perjalanandinas::create($data);
         if ($simpan) {
             return Redirect::back()->with(['success' => 'Data Berhasil Disimpan.']);
         } else {
@@ -60,9 +60,9 @@ class KoderekeningController extends Controller
         $id_rekening   = $request->id_rekening;
         $id_rekening   = Crypt::decrypt($id_rekening);
 
-        $koderekening  = Koderekening::where('id_rekening', $id_rekening)->first();
+        $perjadin  = Perjalanandinas::where('id_rekening', $id_rekening)->first();
 
-        return view('admin.koderekening.edit', compact('koderekening'));
+        return view('admin.perjadin.edit', compact('perjadin'));
 
     }
 
@@ -71,14 +71,14 @@ class KoderekeningController extends Controller
         $id_rekening   = $request->id;
         $id_rekening   = Crypt::decrypt($id_rekening);
         $rekening      = $request->subkegiatan;
-        $koderekening  = $request->kodesubkegiatan;
+        $perjadin  = $request->kodesubkegiatan;
 
         $data       = [
-            'kd_rekening'    => $koderekening,
+            'kd_rekening'    => $perjadin,
             'nm_rekening'    => $rekening,
         ];
 
-        $update = Koderekening::where('id_rekening', $id_rekening)->update($data);
+        $update = Perjalanandinas::where('id_rekening', $id_rekening)->update($data);
         if ($update) {
             return Redirect::back()->with(['success' => 'Data Berhasil Diubah']);
         } else {
@@ -90,7 +90,7 @@ class KoderekeningController extends Controller
     public function status($id_rekening){
 
         $id_rekening   = Crypt::decrypt($id_rekening);
-        $subkegiatan      = Koderekening::where('id_rekening', $id_rekening)->first();
+        $subkegiatan      = Perjalanandinas::where('id_rekening', $id_rekening)->first();
 
         $status     = $subkegiatan->status;
 
@@ -104,7 +104,7 @@ class KoderekeningController extends Controller
             ];
         }
 
-        $update = Koderekening::where('id_rekening',$id_rekening)->update($data);
+        $update = Perjalanandinas::where('id_rekening',$id_rekening)->update($data);
 
         if ($update) {
             return Redirect::back()->with(['success' => 'Status Data Berhasil Diubah']);
@@ -120,7 +120,7 @@ class KoderekeningController extends Controller
         if ($cekAnggaran) {
             return Redirect::back()->with(['warning' => 'Tidak dapat menghapus rekening karena digunakan pada anggaran']);
         } else {
-            $delete = Koderekening::where('id_rekening', $id_rekening)->delete();
+            $delete = Perjalanandinas::where('id_rekening', $id_rekening)->delete();
             if ($delete) {
                 return Redirect::back()->with(['success' => 'Data Berhasil Dihapus']);
             } else {
@@ -131,3 +131,4 @@ class KoderekeningController extends Controller
     
     
 }
+

@@ -1,21 +1,16 @@
-         <form action="{{ Route('u.pegawai')}}"  method="POST" enctype="multipart/form-data">
+         <form action="{{ Route('u.pptk')}}"  method="POST" enctype="multipart/form-data">
          @csrf
              <div class="mb-3">
-                 <label class="form-label">Nama :</label>
-                 <input type="hidden" name="id" value="{{ Crypt::encrypt($pegawai->id_pegawai) }}" class="form-control input-default" required>
-                 <input type="text" name="nama" value="{{ $pegawai->nama }}" class="form-control input-default" required>
-             </div>
-             <div class="mb-3">
-                 <label class="form-label">NIP :</label>
-                 <input type="text" name="nip" value="{{ $pegawai->nip }}" class="form-control input-default" required>
-             </div>
-             <div class="mb-3">
-                 <label class="form-label">Pangkat / Golongan :</label>
-                 <input type="text" name="pangkgol" value="{{ $pegawai->pangkgol }}" class="form-control input-default">
-             </div>
-             <div class="mb-3">
-                 <label class="form-label">Jabatan :</label>
-                 <input type="text" name="jabatan" value="{{ $pegawai->jabatan }}" class="form-control input-default" required>
+                 <label class="form-label">PPTK :</label>
+                 <select class="input-default form-control" name="pegawai" required>
+                    <option value="">Pilih PPTK</option>
+                    @foreach ($pegawai as $d)
+                    <option {{ $pptk->id_pegawai == $d->id_pegawai ? 'selected' : '' }}
+                    value="{{ Crypt::encrypt($d->id_pegawai) }}">{{$d->nip }} - {{$d->nama }} </option>
+                    @endforeach
+                </select>
+                 <input type="hidden" name="dpa" value="{{ Crypt::encrypt($dpa->id_dpa) }}" class="form-control input-default" required>
+                 <input type="hidden" name="pptk" value="{{ Crypt::encrypt($pptk->id_pegawai) }}" class="form-control input-default" required>
              </div>
         </div>
      </div>

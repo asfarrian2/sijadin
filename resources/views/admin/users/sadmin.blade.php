@@ -11,7 +11,7 @@
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
 							<div class="dashboard_bar">
-                                Kode Rekening
+                                Super Admin
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
 				<div class="row page-titles">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item active"><a href="/admin/dashboard">SIJADIN</a></li>
-						<li class="breadcrumb-item">Kode Rekening</li>
+						<li class="breadcrumb-item">Super Admin</li>
 					</ol>
                 </div>
                 <!-- row -->
@@ -78,16 +78,26 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="basic-form">
-                                                <form action="{{ route('a.koderekening')}}" method="POST">
+                                                <form action="{{ route('a.users')}}" method="POST">
                                                 @csrf
                                                 <div class="mb-3">
-                                                    <label class="form-label">Kode Rekening:</label>
-                                                    <input type="text" name="koderekening" class="form-control input-default" required>
+                                                    <label class="form-label">Pegawai :</label>
+                                                    <select class="input-default form-control" name="pegawai" required>
+                                                    <option value="">Pilih Pegawai</option>
+                                                    @foreach ($pegawai as $d)
+                                                    <option value="{{ Crypt::encrypt($d->id_pegawai) }}">{{$d->nip }} - {{$d->nama }}</option>
+                                                    @endforeach
+                                                    </select>
                                                 </div>    
                                                 <div class="mb-3">
-                                                    <label class="form-label">Nama Rekening :</label>
-                                                    <input type="text" name="rekening" class="form-control input-default" required>
+                                                    <label class="form-label">Email :</label>
+                                                    <input type="email" name="email" class="form-control input-default" required>
                                                 </div> 
+                                                <div class="mb-3">
+                                                    <label class="form-label">Password :</label>
+                                                    <input type="text" name="password" class="form-control input-default" required>
+                                                    <input type="hidden" name="role" value="superadmin" class="form-control input-default" required>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -104,18 +114,17 @@
                                         <thead>
                                             <tr>
                                                 <th style="text-align:center;">NO.</th>
-                                                <th style="text-align:center;">KODE REKENING</th>
-                                                <th style="text-align:center;">NAMA REKENING</th>
-                                                <th style="text-align:center;">STATUS</th>
+                                                <th style="text-align:center;">NAMA / NIP</th>
+                                                <th style="text-align:center;">EMAIL</th>
                                                 <th style="text-align:center;">AKSI</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach ($koderekening as $d)
+                                        @foreach ($users as $d)
                                             <tr>
                                                 <td style="color: black; text-align:center;">{{ $loop->iteration }}</td>
-                                                <td style="color: black; text-align:center;">{{$d->kd_rekening}}</td>
-                                                <td style="color: black;">{{$d->nm_rekening}}</td>
+                                                <td style="color: black;">{{$d->pegawai->nama}}</td>
+                                                <td style="color: black; text-align:center;">{{ $d->email}}</td>
                                                 @if ($d->status == '0')
                                                         <td style="text-align:center;"><span class="badge light badge-warning">Nonaktif</span></td>
                                                     @else
@@ -128,8 +137,8 @@
 														</button>
                                                         @csrf
 														<div class="dropdown-menu">
-															<a class="dropdown-item edit" href="#" data-id="{{Crypt::encrypt($d->id_rekening)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
-															<a class="dropdown-item hapus" href="#" data-id="{{Crypt::encrypt($d->id_rekening)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
+															<a class="dropdown-item edit" href="#" data-id="{{Crypt::encrypt($d->id)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
+															<a class="dropdown-item hapus" href="#" data-id="{{Crypt::encrypt($d->id)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
 														</div>
 													</div>
                                                 </td>
@@ -139,9 +148,8 @@
                                         <tfoot>
                                             <tr>
                                                 <th style="text-align:center;">NO.</th>
-                                                <th style="text-align:center;">KODE REKENING</th>
-                                                <th style="text-align:center;">NAMA REKENING</th>
-                                                <th style="text-align:center;">STATUS</th>
+                                                <th style="text-align:center;">NAMA / NIP</th>
+                                                <th style="text-align:center;">EMAIL</th>
                                                 <th style="text-align:center;">AKSI</th>
                                             </tr>
                                         </tfoot>
@@ -186,14 +194,14 @@
     <!-- Button Edit SPJ -->
     <script>
     $(document).on('click', '.edit', function(){
-        var id_rekening = $(this).attr('data-id');
+        var id = $(this).attr('data-id');
         $.ajax({
                         type: 'POST',
                         url: '/admin/sumberdana/koderekening/edit',
                         cache: false,
                         data: {
                             _token: "{{ csrf_token() }}",
-                            id_rekening: id_rekening
+                            id: id
                         },
                         success: function(respond) {
                             $("#loadeditform").html(respond);
@@ -209,7 +217,7 @@
     <!-- Start Button Hapus -->
     <script>
     $(document).on('click', '.hapus', function(){
-        var id_rekening = $(this).attr('data-id');
+        var id = $(this).attr('data-id');
     Swal.fire({
       title: "Apakah Anda Yakin Data Ini Ingin Di Hapus ?",
       text: "Jika Ya Maka Data Akan Terhapus Permanen",
@@ -220,7 +228,7 @@
       confirmButtonText: "Ya, Hapus Saja!"
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location = "/admin/sumberdana/koderekening/hapus"+id_rekening
+        window.location = "/admin/sumberdana/koderekening/hapus"+id
       }
     });
     });

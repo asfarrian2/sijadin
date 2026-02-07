@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\AnggaranController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KoderekeningController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\PerjalanandinasController;
 use App\Http\Controllers\SubkegiatanController;
 use App\Http\Controllers\TahunController;
+use App\Http\Controllers\UserController;
 use App\Models\Subkegiatan;
 use Illuminate\Support\Facades\Route;
 
@@ -20,8 +23,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Home
-Route::get('/', [DashboardController::class, 'view']);
+// Auth Proses
+Route::get('/', [AuthController::class, 'view'])->name('login');
+Route::post('/auth/login', [AuthController::class, 'login'])->name('auth');
+Route::get('/auth/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+Route::group(['middleware' => ['auth', 'role:superadmin']], function () {
+// Dashboard
+Route::get('/admin/dashboard', [DashboardController::class, 'view']);
 
 // Sub Kegiatan
 Route::get('/admin/sumberdana/subkegiatan', [SubkegiatanController::class, 'view'])->name('subkegiatan');
@@ -55,9 +65,11 @@ Route::post('/admin/sumberdana/tahun/dpa/update', [TahunController::class, 'upda
 // Anggaran
 Route::get('/admin/sumberdana/tahun/dpa/rincian{id_dpa}', [AnggaranController::class, 'view']);
 Route::post('/admin/sumberdana/tahun/dpa/rincian/store', [AnggaranController::class, 'store'])->name('a.anggaran');
-Route::post('/admin/sumberdana/tahun/dpa/rincian/edit', [AnggaranController::class, 'edit']);
-Route::get('/admin/sumberdana/tahun/dpa/rincian/hapus{id_dpa}', [AnggaranController::class, 'hapus']);
-Route::post('/admin/sumberdana/tahun/dpa/rincian/update', [AnggaranController::class, 'update_dpa'])->name('u.anggaran');
+Route::post('/admin/sumberdana/tahun/dpa/pptk/edit', [AnggaranController::class, 'edit']);
+Route::post('/admin/sumberdana/tahun/dpa/rincian/edit', [AnggaranController::class, 'edit_r']);
+Route::post('/admin/sumberdana/tahun/dpa/pptk/update', [AnggaranController::class, 'update'])->name('u.pptk');
+Route::get('/admin/sumberdana/tahun/dpa/rincian/hapus/{id_anggaran}', [AnggaranController::class, 'hapus']);
+Route::post('/admin/sumberdana/tahun/dpa/rincian/update', [AnggaranController::class, 'update_r'])->name('u.anggaran');
 
 // Pegawai
 Route::get('/admin/pegawai', [PegawaiController::class, 'view'])->name('pegawai');
@@ -67,3 +79,20 @@ Route::post('/admin/pegawai/update', [PegawaiController::class, 'update'])->name
 Route::get('/admin/pegawai/hapus{id_pegawai}', [PegawaiController::class, 'hapus']);
 Route::get('/admin/pegawai/status{id_pegawai}', [PegawaiController::class, 'status']);
 
+// Perjadin
+Route::get('/admin/perjadin/pegawai', [PerjalanandinasController::class, 'view_admin'])->name('perjadin');
+Route::post('/admin/perjadin/pegawai/store', [PerjalanandinasController::class, 'store'])->name('a.perjadin');
+Route::post('/admin/perjadin/pegawai/edit', [PerjalanandinasController::class, 'edit']);
+Route::post('/admin/perjadin/pegawai/update', [PerjalanandinasController::class, 'update'])->name('u.perjadin');
+Route::get('/admin/perjadin/pegawai/hapus{id_rekening}', [PerjalanandinasController::class, 'hapus']);
+Route::get('/admin/perjadin/pegawai/status{id_rekening}', [PerjalanandinasController::class, 'status']);
+
+// User
+Route::get('/admin/users/superadmin', [UserController::class, 'view_sadmin'])->name('superadmin');
+Route::post('/admin/users/store', [UserController::class, 'store'])->name('a.users');
+Route::post('/admin/users/edit', [UserController::class, 'edit']);
+Route::post('/admin/users/update', [UserController::class, 'update'])->name('u.users');
+Route::get('/admin/users/hapus{id}', [UserController::class, 'hapus']);
+Route::get('/admin/users/status{id}', [UserController::class, 'status']);
+
+});

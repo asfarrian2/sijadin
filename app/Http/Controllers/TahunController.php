@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tahun;
 use App\Models\Dpa;
+use App\Models\Anggaran;
 
 class TahunController extends Controller
 {
@@ -215,14 +216,19 @@ class TahunController extends Controller
 
         $id_dpa = Crypt::decrypt($id_dpa);
 
-        $delete = Dpa::where('id_dpa',$id_dpa)->delete();
-
-        if ($delete) {
-            return Redirect::back()->with(['success' => 'Data Berhasil Dihapus']);
-        } else {
-            return Redirect::back()->with(['warning' => 'Data Gagal Dihapus']);
-        }
-    }
+          $cekAnggaran = Anggaran::where('id_dpa', $id_dpa)->first();
+          if ($cekAnggaran) {
+              return Redirect::back()->with(['warning' => 'Tidak dapat menghapus DPA Karena terdapat Sub Kegiatan']);
+          } else {
+              $dpa = DPA::find($id_dpa);
+              if ($dpa) {
+                  $dpa->delete();
+                  return Redirect::back()->with(['success' => 'DPA berhasil dihapus']);
+              } else {
+                  return Redirect::back()->with(['warning' => 'DPA tidak ditemukan']);
+              }
+          }
+}
 
 
     

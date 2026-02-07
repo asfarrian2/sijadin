@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Anggaran;
+use App\Models\Dpa;
 use App\Models\Subkegiatan;
 use App\Models\Koderekening;
 use App\Models\Pegawai;
@@ -53,6 +54,7 @@ class AnggaranController extends Controller
         $id_rekening    = $request->koderekening;
         $id_pegawai     = $request->pegawai;
         $pagu           = $request->pagu;
+        $pagu           = str_replace('.','', $pagu);
 
         $data = [
             'id_anggaran'    => $id,
@@ -60,8 +62,7 @@ class AnggaranController extends Controller
             'id_subkegiatan' => $id_subkegiatan,
             'id_rekening'    => $id_rekening,
             'id_pegawai'     => $id_pegawai,
-            'pagu'           => $pagu,        
-            'status'         => '1'
+            'pagu'           => $pagu
         ];
         $simpan = Anggaran::create($data);
         if ($simpan) {
@@ -75,32 +76,33 @@ class AnggaranController extends Controller
     //Tampilkan Halaman Edit Data
     public function edit(Request $request){
 
-        $id_anggaran   = $request->id_anggaran;
-        $id_anggaran   = Crypt::decrypt($id_anggaran);
+        $id_dpa        = $request->id_dpa;
+        $id_dpa        = Crypt::decrypt($id_dpa);
+        $id_pegawai    = $request->id_pegawai;
+        $id_pegawai    = Crypt::decrypt($id_pegawai);
+        $pegawai       = Pegawai::where('status', '1')->get();
 
-        $anggaran    = Anggaran::where('id_anggaran', $id_anggaran)->first();
+        $dpa         = Dpa::where('id_dpa', $id_dpa)->first();
+        $pptk        = Pegawai::where('id_pegawai', $id_pegawai)->first();
 
-        return view('admin.anggaran.edit', compact('anggaran'));
+        return view('admin.anggaran.edit', compact('dpa', 'pegawai', 'pptk'));
 
     }
 
     public function update(Request $request){
 
-        $id_anggaran   = $request->id;
-        $id_anggaran   = Crypt::decrypt($id_anggaran);
-        $nama         = $request->nama;
-        $nip          = $request->nip;
-        $pangkgol     = $request->pangkgol;
-        $jabatan      = $request->jabatan;
+        $id_dpa       = $request->dpa;
+        $id_dpa       = Crypt::decrypt($id_dpa);
+        $id_pegawai   = $request->pegawai;
+        $id_pegawai   = Crypt::decrypt($id_pegawai);
+        $id_pptk      = $request->pptk;
+        $id_pptk      = Crypt::decrypt($id_pptk);
 
         $data       = [
-            'nama'       => $nama,
-            'nip'        => $nip,
-            'pangkgol'   => $pangkgol,
-            'jabatan'    => $jabatan
+            'id_pegawai'       => $id_pegawai
         ];
 
-        $update = Anggaran::where('id_anggaran', $id_anggaran)->update($data);
+        $update = Anggaran::where('id_pegawai', $id_pptk)->where('id_dpa', $id_dpa)->update($data);
         if ($update) {
             return Redirect::back()->with(['success' => 'Data Berhasil Diubah']);
         } else {
@@ -135,7 +137,38 @@ class AnggaranController extends Controller
         }
     }
 
-        public function hapus($id_anggaran){
+    public function edit_r(Request $request){
+
+        $id_anggaran   = $request->id_anggaran;
+        $id_anggaran   = Crypt::decrypt($id_anggaran);
+
+        $anggaran    = Anggaran::where('id_anggaran', $id_anggaran)->first();
+
+        return view('admin.anggaran.editr', compact('anggaran'));
+
+    }
+
+    public function update_r(Request $request){
+
+        $id_anggaran   = $request->id;
+        $id_anggaran   = Crypt::decrypt($id_anggaran);
+        $pagu           = $request->pagu;
+        $pagu           = str_replace('.','', $pagu);
+
+        $data       = [
+            'pagu'    => $pagu
+        ];
+
+        $update = Anggaran::where('id_anggaran', $id_anggaran)->update($data);
+        if ($update) {
+            return Redirect::back()->with(['success' => 'Data Berhasil Diubah']);
+        } else {
+            return Redirect::back()->with(['warning' => 'Data Gagal Diubah']);
+        }
+        
+    }
+
+    public function hapus($id_anggaran){
 
         $id_anggaran = Crypt::decrypt($id_anggaran);
 

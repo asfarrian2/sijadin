@@ -190,7 +190,7 @@
 
     <!-- Button Edit SPJ -->
     <script>
-    $('.edit').click(function(){
+    $(document).on('click', '.edit', function(){
         var id_subkegiatan = $(this).attr('data-id');
         $.ajax({
                         type: 'POST',
@@ -213,7 +213,7 @@
 
     <!-- Start Button Hapus -->
     <script>
-    $('.hapus').click(function(){
+    $(document).on('click', '.hapus', function(){
         var id_subkegiatan = $(this).attr('data-id');
     Swal.fire({
       title: "Apakah Anda Yakin Data Ini Ingin Di Hapus ?",
@@ -238,7 +238,7 @@
 
 <!-- Button Status -->
 <script>
-$('.status').click(function(){
+$(document).on('click', '.status', function(){
     var id_subkegiatan = $(this).attr('data-id');
 Swal.fire({
   title: "Apakah Anda Yakin Ingin Mengubah Status Data Ini ?",
