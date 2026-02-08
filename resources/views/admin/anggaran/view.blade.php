@@ -11,7 +11,7 @@
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
 							<div class="dashboard_bar">
-                                Rincian DPA
+                                Rincian Anggaran
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,8 @@
 				<div class="row page-titles">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item active"><a href="/admin/dashboard">SIJADIN</a></li>
-						<li class="breadcrumb-item">Rincian DPA</li>
+						<li class="breadcrumb-item active" ><a href="/admin/sumberdana/tahun">ANGGARAN</a></li>
+                        <li class="breadcrumb-item" >{{ $page->dpa }}</li>
 					</ol>
                 </div>
                 <!-- row -->
@@ -66,7 +67,7 @@
                                 <h4 class="card-title">Tabel Data</h4>
                                 <!-- Button trigger modal -->
                                 <div class="btn-group">
-                                    <a type="button" class="btn btn-secondary mb-2 me-2" data-bs-toggle="modal" data-bs-target="#sinkrondata"><i class="fa fa-refresh"></i> Sinkron</a>
+                                    <button type="button" class="btn btn-secondary mb-2 me-2" data-bs-toggle="modal" data-bs-target="#sinkrondata"><i class="fa fa-refresh"></i> Sinkron</button>
                                     <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#tambahdata"><i class="fa fa-plus"></i> Tambah</button>
                                 </div>
                             </div>
@@ -125,6 +126,39 @@
                                 </div>
                             </div>
                             <!-- End Modal -->
+                            <!-- Start Modal -->
+                            <div class="modal fade" id="sinkrondata">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title">Sinkron Data</h3>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="basic-form">
+                                                <form action="{{ route('a.sinkron')}}" method="POST">
+                                                @csrf
+                                                    <input type="hidden" name="dpa" value="{{ Crypt::encrypt($id_dpa) }}" class="form-control input-default" required>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Pilih Data DPA yang Disinkronkan :</label>
+                                                    <select class="input-default form-control" name="dpalama" required>
+                                                    <option value="">Pilih DPA</option>
+                                                    @foreach ($dpa as $d)
+                                                    <option value="{{ Crypt::encrypt($d->id_dpa) }}">{{$d->dpa }} tanggal: {{ $d->id_dpa }}</option>
+                                                    @endforeach
+                                                    </select>
+                                                </div>    
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Simpan</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Modal -->
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table id="example" class="display" style="min-width: 845px">
@@ -142,13 +176,13 @@
                                                 <td style="color: black; text-align:center;">{{ $loop->iteration }}</td>
                                                 <td style="color: black;">{{ $d->nama}} <br> {{ $d->nip }}</td>
                                                 <td style="color: black;">
-                                                    @foreach ($d->anggaran as $anggaran)
-                                                        <p class="text mb-1 mt-1" style="color: green">- {{ $anggaran->subkegiatan->kd_subkegiatan }} {{ $anggaran->subkegiatan->nm_subkegiatan }}</p>
-                                                        <p class="text mb-1"> {{$anggaran->koderekening->kd_rekening}} {{ $anggaran->koderekening->nm_rekening }} </p>
-                                                        <p class="text mb-1"> Nilai : Rp {{ number_format($anggaran->pagu, 0, ',', '.') }},-</p>&nbsp;
+                                                    @foreach ($d->anggaran as $rincian)
+                                                        <p class="text mb-1 mt-1" style="color: green">- {{ $rincian->subkegiatan->kd_subkegiatan }} {{ $rincian->subkegiatan->nm_subkegiatan }}</p>
+                                                        <p class="text mb-1"> {{$rincian->koderekening->kd_rekening}} {{ $rincian->koderekening->nm_rekening }} </p>
+                                                        <p class="text mb-1"> Nilai : Rp {{ number_format($rincian->pagu, 0, ',', '.') }},-</p>&nbsp;
                                                         @csrf
-                                                        &nbsp;<a type="button" class="editr" data-id="{{Crypt::encrypt($anggaran->id_anggaran)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
-                                                        &nbsp; &nbsp;<a type="button" class="hapusr mb-3" data-id="{{Crypt::encrypt($anggaran->id_anggaran)}}"> <i class="fa fa-trash color-muted"></i> Hapus</a><br>
+                                                        &nbsp;<a type="button" class="editr" data-id="{{Crypt::encrypt($rincian->id_anggaran)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
+                                                        &nbsp; &nbsp;<a type="button" class="hapusr mb-3" data-id="{{Crypt::encrypt($rincian->id_anggaran)}}"> <i class="fa fa-trash color-muted"></i> Hapus</a><br>
                                                     @endforeach
                                                 </td>
                                                 <td>

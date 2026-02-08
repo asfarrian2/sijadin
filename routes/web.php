@@ -65,6 +65,7 @@ Route::post('/admin/sumberdana/tahun/dpa/update', [TahunController::class, 'upda
 // Anggaran
 Route::get('/admin/sumberdana/tahun/dpa/rincian{id_dpa}', [AnggaranController::class, 'view']);
 Route::post('/admin/sumberdana/tahun/dpa/rincian/store', [AnggaranController::class, 'store'])->name('a.anggaran');
+Route::post('/admin/sumberdana/tahun/dpa/rincian/sinkron', [AnggaranController::class, 'sinkron'])->name('a.sinkron');
 Route::post('/admin/sumberdana/tahun/dpa/pptk/edit', [AnggaranController::class, 'edit']);
 Route::post('/admin/sumberdana/tahun/dpa/rincian/edit', [AnggaranController::class, 'edit_r']);
 Route::post('/admin/sumberdana/tahun/dpa/pptk/update', [AnggaranController::class, 'update'])->name('u.pptk');
@@ -86,6 +87,9 @@ Route::post('/admin/perjadin/pegawai/edit', [PerjalanandinasController::class, '
 Route::post('/admin/perjadin/pegawai/update', [PerjalanandinasController::class, 'update'])->name('u.perjadin');
 Route::get('/admin/perjadin/pegawai/hapus{id_rekening}', [PerjalanandinasController::class, 'hapus']);
 Route::get('/admin/perjadin/pegawai/status{id_rekening}', [PerjalanandinasController::class, 'status']);
+Route::get('/get-subkegiatan/{idDpa}', [PerjalanandinasController::class, 'getSubkegiatan']);
+Route::get('/get-koderekening/{idSubkegiatan}', [PerjalanandinasController::class, 'getKoderekening']);
+
 
 // User
 Route::get('/admin/users/superadmin', [UserController::class, 'view_sadmin'])->name('superadmin');

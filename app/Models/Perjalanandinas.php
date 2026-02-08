@@ -4,9 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Anggaran;
+
 
 class Perjalanandinas extends Model
 {
     protected $table='tb_perjadin';
-    protected $fillable = ['id_perjadin', 'id_anggaran', 'dasar', 'keperluan', 'tujuan', 'tgl_berangkat', 'tgl_pulang', 'pagu', 'tipe', 'status', 'pengguna'];
+    protected $fillable = ['id_perjadin', 'id_anggaran', 'dasar', 'keperluan', 'tujuan', 'tgl_berangkat', 'tgl_pulang', 'jenis', 'tipe', 'status', 'pengguna'];
+
+    public function anggaran()
+    {
+        return $this->belongsTo(Anggaran::class, 'id_anggaran', 'id_anggaran');
+    }
 }

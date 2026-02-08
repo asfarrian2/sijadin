@@ -29,4 +29,9 @@ class Anggaran extends Model
     {
         return $this->belongsTo(Koderekening::class, 'id_rekening', 'id_rekening');
     }
+    public function dpa()
+    {
+        return $this->belongsTo(Dpa::class, 'id_dpa', 'id_dpa');
+    }
+
 }

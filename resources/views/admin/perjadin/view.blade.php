@@ -69,7 +69,7 @@
                             </div>
                             <!-- Start Modal -->
                             <div class="modal fade" id="tambahdata">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h3 class="modal-title">Tambah Perjalanan Dinas</h3>
@@ -82,36 +82,47 @@
                                                 @csrf
                                                 <div class="mb-3">
                                                     <label class="form-label">Dasar Anggaran:</label>
-                                                    <input type="text" name="koderekening" class="form-control input-default" required>
+                                                    <select class="input-default form-control" name="anggaran" id="anggaran" required>
+                                                        <option value="">Pilih Dasar Anggaran</option>
+                                                        @foreach ($dpa as $d)
+                                                        <option value="{{ Crypt::encrypt($d->id_dpa) }}"> {{$d->dpa}} tanggal {{ $d->tgl }} </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>    
                                                 <div class="mb-3">
+                                                    <label class="form-label">Sub Kegiatan / Kode Rekening :</label>
+                                                    <select class="input-default form-control" name="anggaran" id="subkegiatan" required>
+                                                        <option value="">Pilih Sub Kegiatan / Kode Rekening</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3 type_msg">
                                                     <label class="form-label">Dasar Perjalanan :</label>
-                                                    <input type="text" name="rekening" class="form-control input-default" required>
+                                                    <textarea style="height: 80px;" name="dasar" class="form-control" required></textarea>
                                                 </div> 
                                                 <div class="mb-3">
-                                                    <label class="form-label">Keperluan :</label>
-                                                    <input type="text" name="rekening" class="form-control input-default" required>
+                                                    <label class="form-label">Keperluan / Perihal:</label>
+                                                    <textarea style="height: 80px;" name="keperluan" class="form-control" required></textarea>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Tujuan :</label>
-                                                    <input type="text" name="rekening" class="form-control input-default" required>
+                                                    <input type="text" name="tujuan" class="form-control input-default" required>
                                                 </div>  
                                                 <div class="mb-3">
-                                                    <label class="form-label">Keperluan / Perihal :</label>
-                                                    <input type="text" name="rekening" class="form-control input-default" required>
-                                                </div>
-                                                <div class="mb-3">
                                                     <label class="form-label">Tanggal Berangkat :</label>
-                                                    <input type="date" name="rekening" class="form-control input-default" required>
+                                                    <input type="date" name="tgl_berangkat" id="tgl_berangkat" class="form-control input-default" required>
                                                 </div> 
                                                 <div class="mb-3">
                                                     <label class="form-label">Tanggal Pulang :</label>
-                                                    <input type="date" name="rekening" class="form-control input-default" required>
-                                                </div> 
+                                                    <input type="date" name="tgl_pulang" id="tgl_pulang" class="form-control input-default" required>
+                                                </div>
                                                 <div class="mb-3">
-                                                    <label class="form-label">Pagu :</label>
-                                                    <input type="text" name="rekening" class="form-control input-default" required>
-                                                </div>  
+                                                    <label class="form-label">Tanggal Pulang :</label>
+                                                <select class="input-default form-control" name="jenis" required>
+                                                    <option value="">Pilih Jenis Perjalanan</option>
+                                                    <option value="1">Dalam Daerah</option>
+                                                    <option value="2">Luar Daerah</option>
+                                                </select>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -128,9 +139,10 @@
                                         <thead>
                                             <tr>
                                                 <th style="text-align:center;">NO.</th>
-                                                <th style="text-align:center;">DASAR</th>
-                                                <th style="text-align:center;">KEPERLUAN / TUJUAN / PERIODE</th>
-                                                <th style="text-align:center;">PENERIMA</th>
+                                                <th style="text-align:center;">NOMOR SPT</th>
+                                                <th style="text-align:center;">KEPERLUAN / PERIODE / TUJUAN</th>
+                                                <th style="text-align:center;">JENIS</th>
+                                                <th style="text-align:center;">PEGAWAI</th>
                                                 <th style="text-align:center;">STATUS</th>
                                                 <th style="text-align:center;">AKSI</th>
                                             </tr>
@@ -140,11 +152,19 @@
                                             <tr>
                                                 <td style="color: black; text-align:center;">{{ $loop->iteration }}</td>
                                                 <td style="color: black; text-align:center;">{{$d->dasar}}</td>
-                                                <td style="color: black;">{{$d->keperluan}}</td>
-                                                @if ($d->status == '0')
-                                                        <td style="text-align:center;"><span class="badge light badge-warning">Nonaktif</span></td>
+                                                <td style="color: black;">{{$d->keperluan}}<br>Periode :{{ \Carbon\Carbon::parse($d->tgl_berangkat)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($d->tgl_pulang)->format('d/m/Y') }} ({{ \Carbon\Carbon::parse($d->tgl_pulang)->diffInDays(\Carbon\Carbon::parse($d->tgl_berangkat)) + 1 }} Hari)<br>Tujuan: {{ $d->tujuan }}</td>
+                                                <td style="color: black; text-align:center;">
+                                                    @if ($d->jenis == '1')
+                                                    Dalam Daerah
                                                     @else
-                                                        <td style="text-align:center;"><span class="badge light badge-success">Aktif</span></td>
+                                                    Luar Daerah    
+                                                    @endif
+                                                </td>
+                                                <td style="color: black;"></td>
+                                                @if ($d->status == '0')
+                                                        <td style="text-align:center;"><span class="badge light badge-warning">Draft</span></td>
+                                                    @elseif ($d->status == '1')
+                                                        <td style="text-align:center;"><span class="badge light badge-secondary">Terkirim</span></td>
                                                 @endif
                                                 <td>
                                                     <div class="dropdown">
@@ -153,6 +173,7 @@
 														</button>
                                                         @csrf
 														<div class="dropdown-menu">
+															<a class="dropdown-item edit" href=""> <i class="fa fa-eye color-muted"></i> Rincian</a>
 															<a class="dropdown-item edit" href="#" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
 															<a class="dropdown-item hapus" href="#" data-id="{{Crypt::encrypt($d->id_perjadin)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
 														</div>
@@ -164,9 +185,10 @@
                                         <tfoot>
                                             <tr>
                                                 <th style="text-align:center;">NO.</th>
-                                                <th style="text-align:center;">DASAR</th>
-                                                <th style="text-align:center;">KEPERLUAN / TUJUAN / PERIODE</th>
-                                                <th style="text-align:center;">PENERIMA</th>
+                                                <th style="text-align:center;">NOMOR SPT</th>
+                                                <th style="text-align:center;">KEPERLUAN / PERIODE / TUJUAN</th>
+                                                <th style="text-align:center;">JENIS</th>
+                                                <th style="text-align:center;">PEGAWAI</th>
                                                 <th style="text-align:center;">STATUS</th>
                                                 <th style="text-align:center;">AKSI</th>
                                             </tr>
@@ -208,27 +230,98 @@
     <!-- Datatable -->
     <script src="{{asset ('assets/vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{asset ('assets/js/plugins-init/datatables.init.js') }}"></script>
+    <script src="{{asset ('assets/vendor/jquery-nice-select/js/jquery.nice-select.min.js') }}"></script>
+    <script src="{{asset ('assets/vendor/select2/js/select2.full.min.js') }}"></script>
+    <script src="{{asset ('assets/js/plugins-init/select2-init.js') }}"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#anggaran').change(function() {
+            var idDpa = $(this).val();
+            $.ajax({
+                url: '/get-subkegiatan/' + idDpa,
+                type: 'GET',
+                success: function(data) {
+                    $('#subkegiatan').empty();
+                    $('#subkegiatan').append('<option value="">Pilih Sub Kegiatan / Kode Rekening</option>');
+                    $.each(data, function(key, value) {
+                        $('#subkegiatan').append('<option value="' + value.id_anggaran + '">' + value.subkegiatan.kd_subkegiatan + ' ' + value.subkegiatan.nm_subkegiatan + ' - '  + value.koderekening.nm_rekening + '</option>');
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+    <script>
+    const tglBerangkat = document.getElementById('tgl_berangkat');
+    const tglPulang = document.getElementById('tgl_pulang');
+
+    tglBerangkat.addEventListener('change', () => {
+        tglPulang.min = tglBerangkat.value;
+    });
+    </script>
+
+    
 
     <!-- Button Edit SPJ -->
     <script>
     $(document).on('click', '.edit', function(){
-        var id_perjadin = $(this).attr('data-id');
-        $.ajax({
-                        type: 'POST',
-                        url: '/admin/sumberdana/koderekening/edit',
-                        cache: false,
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            id_perjadin: id_perjadin
-                        },
-                        success: function(respond) {
-                            $("#loadeditform").html(respond);
-                        }
-                    });
-         $("#modal-editobjek").modal("show");
+    var id_perjadin = $(this).attr('data-id');
+    $.ajax({
+        type: 'POST',
+        url: '/admin/perjadin/pegawai/edit',
+        cache: false,
+        data: {
+            _token: "{{ csrf_token() }}",
+            id_perjadin: id_perjadin
+        },
+        success: function(respond) {
+            $("#loadeditform").html(respond);
+            $("#modal-editobjek").modal("show");
 
+            // Panggil fungsi untuk mengambil sub kegiatan
+            getSubKegiatan();
+
+            // Panggil fungsi ketika #anggaran berubah
+            $('#eanggaran').change(function() {
+                getSubKegiatan();
+            });
+            // Atur tanggal pulang
+            $('#etgl_berangkat').change(function() {
+                var tanggalBerangkat = $(this).val();
+                $('#etgl_pulang').attr('min', tanggalBerangkat);
+            });
+
+            // Panggil fungsi change secara manual untuk mengatur min tanggal pulang saat halaman dimuat
+            $('#etgl_berangkat').change();
+        }
     });
-    var span = document.getElementsByClassName("close")[0];
+});
+
+// Fungsi untuk mengambil sub kegiatan
+function getSubKegiatan() {
+    var idDpa = $('#eanggaran').val();
+    if (idDpa) {
+        $.ajax({
+            url: '/get-subkegiatan/' + idDpa,
+            type: 'GET',
+            success: function(data) {
+                $('#esubkegiatan').empty();
+                $('#esubkegiatan').append('<option value="">Pilih Sub Kegiatan / Kode Rekening</option>');
+                $.each(data, function(key, value) {
+                    var isSelected = '';
+                    if (value.id_anggaran == $('#id_anggaran_hidden').val()) {
+                        isSelected = 'selected';
+                    }
+                    $('#esubkegiatan').append('<option ' + isSelected + ' value="' + value.id_anggaran + '">' + value.subkegiatan.kd_subkegiatan + ' ' + value.subkegiatan.nm_subkegiatan + ' - ' + value.koderekening.nm_rekening + '</option>');
+                });
+            }
+        });
+    } else {
+        console.log('idDpa tidak ditemukan');
+    }
+}
     </script>
     <!-- END Button Edit SPJ -->
 
@@ -246,7 +339,7 @@
       confirmButtonText: "Ya, Hapus Saja!"
     }).then((result) => {
       if (result.isConfirmed) {
-        window.location = "/admin/sumberdana/koderekening/hapus"+id_perjadin
+        window.location = "/admin/perjadin/pegawai/hapus"+id_perjadin
       }
     });
     });

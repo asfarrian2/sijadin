@@ -30,7 +30,8 @@
     <link href="{{ asset ('assets/vendor/jquery-nice-select/css/nice-select.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset ('assets/vendor/select2/css/select2.min.css') }}">
+	<link href="{{ asset ('assets/vendor/jquery-nice-select/css/nice-select.css') }}" rel="stylesheet">
 
 </head>
 <body>
