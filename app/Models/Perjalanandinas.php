@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Anggaran;
+use App\Models\Rperjadin;
 
 
 class Perjalanandinas extends Model
@@ -15,5 +16,10 @@ class Perjalanandinas extends Model
     public function anggaran()
     {
         return $this->belongsTo(Anggaran::class, 'id_anggaran', 'id_anggaran');
+    }
+
+     public function rperjadin()
+    {
+        return $this->hasMany(Rperjadin::class, 'id_perjadin', 'id_perjadin');
     }
 }

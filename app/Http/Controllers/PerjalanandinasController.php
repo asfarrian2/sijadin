@@ -16,6 +16,8 @@ use App\Models\Anggaran;
 use App\Models\Dpa;
 use App\Models\Subkegiatan;
 use App\Models\Koderekening;
+use App\Models\Pegawai;
+use App\Models\Rperjadin;
 use App\Models\Tahun;
 
 class PerjalanandinasController extends Controller
@@ -27,9 +29,11 @@ class PerjalanandinasController extends Controller
 
         $perjadin = Perjalanandinas::whereHas('anggaran.dpa', function($query) use ($id_tahun) {
                     $query->where('id_tahun', $id_tahun);
-                    })->get();
+                    })->orderby('id_perjadin', 'DESC')->get();
+        
+        $rperjadin= Rperjadin::all();
 
-        return view('admin.perjadin.view', compact('perjadin', 'dpa'));
+        return view('admin.perjadin.view', compact('perjadin', 'dpa', 'rperjadin'));
 
     }
 
@@ -93,8 +97,8 @@ class PerjalanandinasController extends Controller
 
         $id_perjadin   = $request->id_perjadin;
         $id_perjadin   = Crypt::decrypt($id_perjadin);
-        $id_tahun = Auth::user()->id_tahun;
-        $dpa      = Dpa::where('id_tahun', $id_tahun)->get();
+        $id_tahun      = Auth::user()->id_tahun;
+        $dpa           = Dpa::where('id_tahun', $id_tahun)->get();
 
         $perjadin  = Perjalanandinas::where('id_perjadin', $id_perjadin)->first();
         $idanggaran= $perjadin->id_anggaran;
@@ -109,12 +113,22 @@ class PerjalanandinasController extends Controller
 
         $id_perjadin   = $request->id;
         $id_perjadin   = Crypt::decrypt($id_perjadin);
-        $rekening      = $request->subkegiatan;
-        $perjadin  = $request->kodesubkegiatan;
+        $anggaran     = $request->anggaran;
+        $dasar        = $request->dasar;
+        $keperluan    = $request->keperluan;
+        $tujuan       = $request->tujuan;
+        $tgl_berangkat= $request->tgl_berangkat;
+        $tgl_pulang   = $request->tgl_pulang;
+        $jenis        = $request->jenis;
 
         $data       = [
-            'kd_rekening'    => $perjadin,
-            'nm_rekening'    => $rekening,
+            'id_anggaran'    => $anggaran,
+            'dasar'          => $dasar,
+            'keperluan'      => $keperluan,
+            'tujuan'         => $tujuan,
+            'tgl_berangkat'  => $tgl_berangkat,
+            'tgl_pulang'     => $tgl_pulang,
+            'jenis'          => $jenis
         ];
 
         $update = Perjalanandinas::where('id_perjadin', $id_perjadin)->update($data);
@@ -129,7 +143,7 @@ class PerjalanandinasController extends Controller
     public function status($id_perjadin){
 
         $id_perjadin   = Crypt::decrypt($id_perjadin);
-        $subkegiatan      = Perjalanandinas::where('id_perjadin', $id_perjadin)->first();
+        $subkegiatan   = Perjalanandinas::where('id_perjadin', $id_perjadin)->first();
 
         $status     = $subkegiatan->status;
 
@@ -137,7 +151,7 @@ class PerjalanandinasController extends Controller
             $data = [
                 'status' => '1'
             ];
-        }else{
+        }elseif($status == 1){
             $data = [
                 'status' => '0'
             ];
@@ -167,6 +181,94 @@ class PerjalanandinasController extends Controller
             }
         }
     }
+
+    public function add_pegawai(Request $request){
+
+        $id_perjadin   = $request->id_perjadin;
+        $id_perjadin   = Crypt::decrypt($id_perjadin);
+
+         $pegawai = Pegawai::where('status', '1')
+        ->whereNotIn('id_pegawai', function($query) use ($id_perjadin) {
+            $query->select('id_pegawai')
+                ->from('tb_rperjadin')
+                ->where('id_perjadin', $id_perjadin);
+        })
+        ->get();
+
+        return view('admin.perjadin.addpegawai', compact('pegawai', 'id_perjadin'));
+
+    }
+
+    public function simpanPegawai(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+    
+            // =====================
+            // Ambil & decrypt data
+            // =====================
+            $id_perjadin = Crypt::decrypt($request->id_perjadin);
+            $pegawai_id  = $request->pegawai_id;
+            $id_tahun    = Auth::user()->id_tahun;
+    
+            // =====================
+            // Prefix kode
+            // =====================
+            $prefix = $id_tahun . '-RP-';
+    
+            // =====================
+            // Ambil ID terakhir DENGAN LOCK
+            // =====================
+            $lastId = Rperjadin::where('id_rperjadin', 'like', $prefix . '%')
+                ->orderBy('id_rperjadin', 'desc')
+                ->lockForUpdate()
+                ->value('id_rperjadin');
+    
+            // =====================
+            // Tentukan nomor urut
+            // =====================
+            if ($lastId) {
+                $nomorurut = (int) substr($lastId, -5) + 1;
+            } else {
+                $nomorurut = 1;
+            }
+    
+            // =====================
+            // Simpan data pegawai
+            // =====================
+            foreach ($pegawai_id as $id_pegawai) {
+    
+                $kode = $prefix . str_pad($nomorurut, 5, '0', STR_PAD_LEFT);
+    
+                Rperjadin::create([
+                    'id_rperjadin' => $kode,
+                    'id_perjadin'  => $id_perjadin,
+                    'id_pegawai'  => Crypt::decrypt($id_pegawai),
+                ]);
+    
+                $nomorurut++;
+            }
+    
+            DB::commit();
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Data pegawai berhasil disimpan'
+            ]);
+    
+        } catch (\Exception $e) {
+    
+            DB::rollBack();
+    
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyimpan data',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
     
     
 }

@@ -89,6 +89,8 @@ Route::get('/admin/perjadin/pegawai/hapus{id_rekening}', [PerjalanandinasControl
 Route::get('/admin/perjadin/pegawai/status{id_rekening}', [PerjalanandinasController::class, 'status']);
 Route::get('/get-subkegiatan/{idDpa}', [PerjalanandinasController::class, 'getSubkegiatan']);
 Route::get('/get-koderekening/{idSubkegiatan}', [PerjalanandinasController::class, 'getKoderekening']);
+Route::post('/admin/perjadin/pegawai/addpegawai', [PerjalanandinasController::class, 'add_pegawai']);
+Route::post('/simpanperjadin-pegawai', [PerjalanandinasController::class, 'simpanPegawai']);
 
 
 // User

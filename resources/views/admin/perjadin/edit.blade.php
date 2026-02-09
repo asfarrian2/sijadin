@@ -1,5 +1,6 @@
          <form action="{{ Route('u.perjadin')}}"  method="POST" enctype="multipart/form-data">
          @csrf
+         <input type="hidden" name="id" value="{{ Crypt::encrypt($perjadin->id_perjadin) }}">
          <input type="hidden" id="id_anggaran_hidden" value="{{ $perjadin->id_anggaran }}">
             <div class="mb-3">
                 <label class="form-label">Dasar Anggaran:</label>

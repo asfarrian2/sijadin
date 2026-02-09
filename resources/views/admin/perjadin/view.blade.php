@@ -135,14 +135,14 @@
                             <!-- End Modal -->
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="example" class="display" style="min-width: 845px">
+                                    <table id="example" class="display" style="min-width: 1000px">
                                         <thead>
                                             <tr>
                                                 <th style="text-align:center;">NO.</th>
                                                 <th style="text-align:center;">NOMOR SPT</th>
                                                 <th style="text-align:center;">KEPERLUAN / PERIODE / TUJUAN</th>
                                                 <th style="text-align:center;">JENIS</th>
-                                                <th style="text-align:center;">PEGAWAI</th>
+                                                <th style="text-align:center; width: 200px">PEGAWAI</th>
                                                 <th style="text-align:center;">STATUS</th>
                                                 <th style="text-align:center;">AKSI</th>
                                             </tr>
@@ -160,11 +160,21 @@
                                                     Luar Daerah    
                                                     @endif
                                                 </td>
-                                                <td style="color: black;"></td>
+                                                 <td style="color: black;">
+                                                     @foreach ($d->rperjadin->take(3) as $index => $r )
+                                                         <p style="color: rgb(11, 85, 57);" class="mb-0">{{ $r->pegawai->nama }}</p>@if ($index < 2 && $d->rperjadin->count() > 3)@endif
+                                                     @endforeach
+                                                     @if ($d->rperjadin->count() > 3)
+                                                         Dll...
+                                                     @endif
+                                                     <a type="button" class="epegawai" data-id="{{Crypt::encrypt($d->id_perjadin)}}" ><i class="fa fa-edit color-muted"></i> Edit</a>
+                                                </td>
                                                 @if ($d->status == '0')
-                                                        <td style="text-align:center;"><span class="badge light badge-warning">Draft</span></td>
+                                                    <td style="text-align:center;"><span class="badge light badge-warning">Draft</span></td>
                                                     @elseif ($d->status == '1')
-                                                        <td style="text-align:center;"><span class="badge light badge-secondary">Terkirim</span></td>
+                                                    <td style="text-align:center;"><span class="badge light badge-secondary">Terkirim</span></td>
+                                                    @else
+                                                    <td style="text-align:center;"><span class="badge light badge-success">Disetujui</span></td>
                                                 @endif
                                                 <td>
                                                     <div class="dropdown">
@@ -173,9 +183,15 @@
 														</button>
                                                         @csrf
 														<div class="dropdown-menu">
-															<a class="dropdown-item edit" href=""> <i class="fa fa-eye color-muted"></i> Rincian</a>
-															<a class="dropdown-item edit" href="#" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
-															<a class="dropdown-item hapus" href="#" data-id="{{Crypt::encrypt($d->id_perjadin)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
+                                                             @if ($d->status == '0')
+                                                            <a type="button" class="dropdown-item status" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-send color-muted"></i> Submit</a>
+                                                            <a type="button" class="dropdown-item addpegawai" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-plus color-muted"></i> Pegawai</a>
+															<a type="button" class="dropdown-item edit" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
+															<a type="button" class="dropdown-item hapus" data-id="{{Crypt::encrypt($d->id_perjadin)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
+                                                            @elseif ($d->status == '1')
+                                                            <a type="button" class="dropdown-item status" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-ban color-muted"></i> Batalkan</a>
+                                                            @else
+                                                            @endif
 														</div>
 													</div>
                                                 </td>
@@ -215,6 +231,44 @@
                                 </div>
                             </div>
                             <!-- End Modal -->
+                            <!-- Start +PegawaiModal -->
+                            <div class="modal fade" id="modal-addpegawai">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title">Tambah Pegawai</h3>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" id="loadaddpegawai">
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" id="simpan-pegawai">Simpan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End +PegawaiModal -->
+                            <!-- Start List PegawaiModal -->
+                            <div class="modal fade" id="modal-listpegawai">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h3 class="modal-title">Tambah Pegawai</h3>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal">
+                                            </button>
+                                        </div>
+                                        <div class="modal-body" id="loadlistpegawai">
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" id="simpan-pegawai">Simpan</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End List PegawaiModal -->
                         </div>
                     </div>
                 </div>
@@ -345,5 +399,106 @@ function getSubKegiatan() {
     });
     </script>
     <!-- End Button Hapus -->
+
+    <!-- Button Status -->
+    <script>
+    $(document).on('click', '.status', function(){
+        var id_perjadin = $(this).attr('data-id');
+    Swal.fire({
+      title: "Apakah Anda Yakin Ingin Mengubah Status Data Ini ?",
+      text: "Jika Ya Maka Status Data Akan Diubah",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, Ubah Status!"
+      }).then((result) => {
+      if (result.isConfirmed) {
+        window.location = "/admin/perjadin/pegawai/status"+id_perjadin
+        }
+      });
+    });
+    </script>
+    <!-- END Button Status -->
+    
+    <script>
+    var id_perjadin;
+
+    // =======================
+    // BUKA MODAL + LOAD PEGAWAI
+    // =======================
+    $(document).on('click', '.addpegawai', function () {
+        id_perjadin = $(this).attr('data-id');
+
+        $.ajax({
+            type: 'POST',
+            url: '/admin/perjadin/pegawai/addpegawai',
+            cache: false,
+            data: {
+                _token: "{{ csrf_token() }}",
+                id_perjadin: id_perjadin
+            },
+            success: function (respond) {
+                $("#loadaddpegawai").html(respond);
+                $("#modal-addpegawai").modal("show");
+            }
+        });
+    });
+
+    // =======================
+    // SIMPAN PEGAWAI
+    // =======================
+    $(document).on('click', '#simpan-pegawai', function () {
+
+    var pegawaiId = [];
+    $('.pegawai-checkbox:checked').each(function () {
+        pegawaiId.push($(this).val());
+    });
+
+    if (pegawaiId.length === 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Perhatian',
+            text: 'Pilih minimal satu pegawai'
+        });
+        return;
+    }
+
+        $.ajax({
+            type: 'POST',
+            url: '/simpanperjadin-pegawai',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id_perjadin: id_perjadin,
+                pegawai_id: pegawaiId
+            },
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sukses',
+                        text: response.message,
+                    }).then(() => {
+                        location.reload(); //REFRESH HALAMAN
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: response.error ?? 'Terjadi kesalahan'
+                    });
+                }
+            },
+            error: function (xhr) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: xhr.responseJSON?.error ?? 'Server error'
+                });
+            }
+        });
+    });
+    </script>
+
 
 @endpush
