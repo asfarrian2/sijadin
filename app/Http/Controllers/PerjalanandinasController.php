@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Perjalanandinas;
 use App\Models\Anggaran;
 use App\Models\Dpa;
@@ -193,11 +195,70 @@ class PerjalanandinasController extends Controller
                 ->from('tb_rperjadin')
                 ->where('id_perjadin', $id_perjadin);
         })
-        ->get();
+        ->orderby('kelas', 'asc')->get();
 
         return view('admin.perjadin.addpegawai', compact('pegawai', 'id_perjadin'));
-
     }
+
+    public function list_pegawai(Request $request){
+
+        $id_perjadin   = $request->id_perjadin;
+        $id_perjadin   = Crypt::decrypt($id_perjadin);
+
+        $perjadin      = Perjalanandinas::where('id_perjadin', $id_perjadin)->first();
+
+        $status        = $perjadin->status;
+
+        $rperjadin     = Rperjadin::where('id_perjadin', $id_perjadin)
+                         ->orderBy(
+                            Pegawai::select('kelas')
+                                ->whereColumn('tb_pegawai.id_pegawai', 'tb_rperjadin.id_pegawai')
+                            )
+                        ->get();
+
+        $pegawai       = Pegawai::all();
+
+        return view('admin.perjadin.listpegawai', compact('pegawai', 'id_perjadin', 'rperjadin', 'pegawai', 'status'));
+        
+    }
+
+    public function hapusPegawai(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            if (!$request->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tidak ada data yang dipilih'
+                ]);
+            }
+
+            foreach ($request->id as $encryptedId) {
+                $id = Crypt::decrypt($encryptedId);
+
+                Rperjadin::where('id_rperjadin', $id)->delete();
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil dihapus'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus data',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
 
     public function simpanPegawai(Request $request)
     {
@@ -266,6 +327,36 @@ class PerjalanandinasController extends Controller
                 'error'   => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function laporanSpt($id_perjadin){
+
+        $id_perjadin = Crypt::decrypt($id_perjadin);
+
+        $perjadin    = Perjalanandinas::where('id_perjadin', $id_perjadin)->first();
+
+        $rperjadin = Rperjadin::where('id_perjadin', $id_perjadin)
+                     ->whereHas('pegawai')
+                     ->orderBy(
+                         Pegawai::select('kelas')
+                             ->whereColumn('tb_pegawai.id_pegawai', 'tb_rperjadin.id_pegawai')
+                     )
+                     ->get();
+        
+        $pegawai     = Pegawai::all();
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->setPaper([0, 0, 595.28, 935.43], 'potrait', [
+            'margin-top' => '0.5in',
+            'margin-right' => '0.5in',
+            'margin-bottom' => '0.5in',
+            'margin-left' => '0.5in',
+        ]);
+        
+        $pdf->loadView('admin.perjadin.spt', compact('perjadin', 'rperjadin', 'pegawai'));
+
+
+        return $pdf->stream('SPT '.$perjadin->tgl_berangkat.' '.$perjadin->keperluan.' '.$perjadin->tujuan.'.pdf');
     }
 
 

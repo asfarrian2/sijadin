@@ -9,17 +9,23 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($pegawai as $d )
+            @foreach ($rperjadin as $d )
             <tr>
             <td>
 		    	<div class="form-check custom-checkbox checkbox-success check-lg me-3">
-		    		<input type="checkbox" class="form-check-input pegawai-checkbox" value="{{ Crypt::encrypt($d->id_pegawai)}}">
+		    		<input type="checkbox" class="form-check-input hapus-checkbox" value="{{ Crypt::encrypt($d->id_rperjadin)}}">
 		    		<label class="form-check-label" for="customCheckBox2"></label>
                     {{ $loop->iteration }}
 		    	</div>
 		    </td>
-            <td style="color: black;"><b>{{ $d->nama }}</b><br>{{ $d->nip}}</td>
-            <td style="color: black;">{{ $d->jabatan }}</td>
+            <td style="color: black;"><b>{{ $d->pegawai->nama }}</b><br>{{ $d->pegawai->nip}}</td>
+            <td style="color: black;">{{ $d->pegawai->jabatan }}</td>
+            @if ($status > 0)
+            <td>
+                <a type="button" href="/admin/perjadin/pegawai/sppd/{{Crypt::encrypt($d->id_rperjadin)}}" class="btn btn-info btn-xs" target="_BLANK"> <i class="fa fa-print color-muted"></i> SPPD</a>
+            </td>
+            @else
+            @endif
             </tr>
             @endforeach
         </tbody>
@@ -33,5 +39,11 @@
     </table>
 </div>
 
+@if ($status == 0)
+<div class="modal-footer">
+    <button type="button" class="btn btn-danger" id="hapus-terpilih"> <i class="fa fa-trash color-muted"></i> Hapus</button>
+</div>
+@else
+@endif
 
     

@@ -85,12 +85,16 @@ Route::get('/admin/perjadin/pegawai', [PerjalanandinasController::class, 'view_a
 Route::post('/admin/perjadin/pegawai/store', [PerjalanandinasController::class, 'store'])->name('a.perjadin');
 Route::post('/admin/perjadin/pegawai/edit', [PerjalanandinasController::class, 'edit']);
 Route::post('/admin/perjadin/pegawai/update', [PerjalanandinasController::class, 'update'])->name('u.perjadin');
-Route::get('/admin/perjadin/pegawai/hapus{id_rekening}', [PerjalanandinasController::class, 'hapus']);
-Route::get('/admin/perjadin/pegawai/status{id_rekening}', [PerjalanandinasController::class, 'status']);
+Route::get('/admin/perjadin/pegawai/hapus{id_perjadin}', [PerjalanandinasController::class, 'hapus']);
+Route::get('/admin/perjadin/pegawai/status{id_perjadin}', [PerjalanandinasController::class, 'status']);
 Route::get('/get-subkegiatan/{idDpa}', [PerjalanandinasController::class, 'getSubkegiatan']);
 Route::get('/get-koderekening/{idSubkegiatan}', [PerjalanandinasController::class, 'getKoderekening']);
 Route::post('/admin/perjadin/pegawai/addpegawai', [PerjalanandinasController::class, 'add_pegawai']);
 Route::post('/simpanperjadin-pegawai', [PerjalanandinasController::class, 'simpanPegawai']);
+Route::post('/admin/perjadin/pegawai/listpegawai', [PerjalanandinasController::class, 'list_pegawai']);
+Route::post('/perjadin/hapus-pegawai', [PerjalanandinasController::class, 'hapusPegawai']);
+Route::get('/admin/perjadin/pegawai/spt/{id_perjadin}', [PerjalanandinasController::class, 'laporanSpt']);
+
 
 
 // User

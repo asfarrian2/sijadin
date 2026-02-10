@@ -166,8 +166,8 @@
                                                      @endforeach
                                                      @if ($d->rperjadin->count() > 3)
                                                          Dll...
-                                                     @endif
-                                                     <a type="button" class="epegawai" data-id="{{Crypt::encrypt($d->id_perjadin)}}" ><i class="fa fa-edit color-muted"></i> Edit</a>
+                                                     @endif 
+                                                    <a type="button" class="listpegawai" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-list color-muted"></i> View</a>
                                                 </td>
                                                 @if ($d->status == '0')
                                                     <td style="text-align:center;"><span class="badge light badge-warning">Draft</span></td>
@@ -189,6 +189,7 @@
 															<a type="button" class="dropdown-item edit" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
 															<a type="button" class="dropdown-item hapus" data-id="{{Crypt::encrypt($d->id_perjadin)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
                                                             @elseif ($d->status == '1')
+                                                            <a type="button" href="/admin/perjadin/pegawai/spt/{{Crypt::encrypt($d->id_perjadin)}}" class="dropdown-item" target="_BLANK"> <i class="fa fa-print color-muted"></i> SPT</a>
                                                             <a type="button" class="dropdown-item status" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-ban color-muted"></i> Batalkan</a>
                                                             @else
                                                             @endif
@@ -244,7 +245,7 @@
                                             
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" id="simpan-pegawai">Simpan</button>
+                                            <button type="button" class="btn btn-primary" id="simpan-pegawai"><i class="fa fa-save color-muted"></i> Simpan</button>
                                         </div>
                                     </div>
                                 </div>
@@ -255,15 +256,12 @@
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h3 class="modal-title">Tambah Pegawai</h3>
+                                            <h3 class="modal-title">List Pegawai</h3>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal">
                                             </button>
                                         </div>
-                                        <div class="modal-body" id="loadlistpegawai">
+                                        <div class="modal-body mb-1" id="loadlistpegawai">
                                             
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger" id="simpan-pegawai">Simpan</button>
                                         </div>
                                     </div>
                                 </div>
@@ -499,6 +497,89 @@ function getSubKegiatan() {
         });
     });
     </script>
+
+    <script>
+/* ===============================
+   BUKA MODAL & LOAD LIST PEGAWAI
+================================ */
+$(document).on('click', '.listpegawai', function () {
+
+    let id_perjadin = $(this).data('id');
+
+    $.ajax({
+        type: 'POST',
+        url: '/admin/perjadin/pegawai/listpegawai',
+        data: {
+            _token: "{{ csrf_token() }}",
+            id_perjadin: id_perjadin
+        },
+        success: function (respond) {
+            $("#loadlistpegawai").html(respond);
+            $("#modal-listpegawai").modal("show");
+        }
+    });
+});
+
+/* ===============================
+   CHECK ALL
+================================ */
+$(document).on('click', '#check-all', function () {
+    $('.hapus-checkbox').prop('checked', this.checked);
+});
+
+/* ===============================
+   HAPUS DATA TERPILIH
+================================ */
+$(document).on('click', '#hapus-terpilih', function () {
+
+    let ids = [];
+    $('.hapus-checkbox:checked').each(function () {
+        ids.push($(this).val());
+    });
+
+    if (ids.length === 0) {
+        Swal.fire('Perhatian', 'Pilih data yang ingin dihapus', 'warning');
+        return;
+    }
+
+    Swal.fire({
+        title: 'Yakin?',
+        text: 'Data yang dihapus tidak dapat dikembalikan',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, hapus',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+            $.ajax({
+                type: 'POST',
+                url: '/perjadin/hapus-pegawai',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: ids
+                },
+                success: function (res) {
+                    if (res.success) {
+                        Swal.fire('Sukses', res.message, 'success')
+                        .then(() => {
+                            // reload isi modal TANPA reload halaman
+                             location.reload();
+                        });
+                    } else {
+                        Swal.fire('Gagal', res.message, 'error');
+                    }
+                },
+                error: function () {
+                    Swal.fire('Error', 'Terjadi kesalahan server', 'error');
+                }
+            });
+        }
+
+    });
+});
+</script>
+
 
 
 @endpush
