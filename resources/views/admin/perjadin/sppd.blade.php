@@ -10,6 +10,19 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" >
     <style>
 
+        @page {
+            margin-top: 0.5cm;
+            margin-right: 1cm;
+            margin-bottom: 1cm;
+            margin-left: 1cm;
+        }
+    
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+
         .title {
             font-family: 'Times New Roman', Times, serif;
             font-size: 18,67px;
@@ -60,7 +73,8 @@
     {{-- Nomor SPD --}}
     <table class="text" style="width: 100%">
         <tr>
-            <td style="text-align: right; width: 450px">
+            <td style="text-align: justify; width: 350px"></td>
+            <td style="text-align: justify; width: 80px">
                 Lembar ke
             </td>
              <td style="text-align: left;">
@@ -68,18 +82,20 @@
             </td>
         </tr>
         <tr>
-            <td style="text-align: right;">
+            <td style="text-align: justify;"></td>
+            <td style="text-align: justify;">
                 Kode No.
             </td>
             <td style="text-align: left;">
                 :
             </td>
         <tr>
-            <td style="text-align: right;">
+            <td style="text-align: justify;"></td>
+            <td style="text-align: justify;">
                 Nomor
             </td>
             <td style="text-align: left;">
-                :
+                : 800.1.11.1/ &nbsp; &nbsp; &nbsp; &nbsp;/22.6/BPKUK/2026
             </td>
         </tr>
     </table>
@@ -99,48 +115,81 @@
         <tr class="tabelbaris" style="padding-bottom: 3px">
             <td style="text-align: center; width: 4%; padding: 4px; vertical-align: top;">1</td>
             <td style="width: 40%; padding: 4px; vertical-align: top;"> Pejabat Pembuat Komitmen/PA/KPA</td>
-            <td style="padding: 4px; vertical-align: top;"> YULIANSYAH, S. Sos, M.M.<br> NIP. 19741015 201001 1 001</td>
+            <td style="padding: 4px; vertical-align: top;" colspan="2"> YULIANSYAH, S. Sos, M.M.<br> NIP. 19741015 201001 1 001</td>
         </tr>
         <tr class="tabelbaris">
             <td style="text-align: center; width: 4%; padding: 4px; vertical-align: top;">2</td>
             <td style="padding: 4px; vertical-align: top;"> Nama / NIP Pegawai yang <br>  melaksanakan perjalanan dinas </td>
-            <td style="padding: 4px; vertical-align: top;"> <b>ACHMAD SAHRUL ASFARIANOOR, S. Kom</b> <br>  NIP. 20000514 202421 1 003</td>
+            <td style="padding: 4px; vertical-align: top;"colspan="2"> <b>{{ $rperjadin->pegawai->nama }}</b> <br> NIP. {{ $rperjadin->pegawai->nip }}</td>
         </tr>
         <tr class="tabelbaris">
             <td style="text-align: center; width: 4%; padding: 4px; vertical-align: top;">3</td>
             <td style="padding: 4px; vertical-align: top;"> a. Pangkat dan Golongan <br>  b. Jabatan / Instansi <br>  c. Tingkat Biaya Perjalanan Dinas</td>
-            <td style="padding: 4px; vertical-align: top;"> a. IX <br>  b. Pranata Komputer Ahli Pertama <br>  c. Luar Daerah</td>
+            <td style="padding: 4px; vertical-align: top;"colspan="2"> a. {{ $rperjadin->pegawai->pangkgol }} <br>  b. {{ $rperjadin->pegawai->jabatan }} <br>  c. @if($rperjadin->jenis = 1)Dalam Daerah @else Luar Daerah @endif </td>
         </tr>
         <tr class="tabelbaris">
             <td style="text-align: center; width: 4%; padding: 4px; vertical-align: top;">4</td>
             <td style="padding: 4px; vertical-align: top;"> Maksud Perjalanan Dinas </td>
-            <td style="padding: 4px; vertical-align: top;"> Perjalanan Dinas Luar Daerah Dalam Rangka Menghadiri Undangan Sosialisasi Kepmendagri900.1-2850 Tahun 2025</td>
+            <td style="padding: 4px; vertical-align: top;"colspan="2"> {{ $rperjadin->perjadin->keperluan }}</td>
         </tr>
         <tr class="tabelbaris">
             <td style="text-align: center; width: 4%; padding: 4px; vertical-align: top;">5</td>
             <td style="padding: 4px; vertical-align: top;"> Alat Angkut yang Dipergunakan </td>
-            <td style="padding: 4px; vertical-align: top;"> Angkutan Darat dan Angkutan Udara</td>
+            <td style="padding: 4px; vertical-align: top;"colspan="2"> Angkutan Darat dan Angkutan Udara</td>
         </tr>
+        <tr class="tabelbaris">
+            <td style="text-align: center; width: 4%; padding: 4px; vertical-align: top;">6</td>
+            <td style="padding: 4px; vertical-align: top;"> a. Tempat Berangkat <br> b. Tempat Tujuan </td>
+            <td style="padding: 4px; vertical-align: top;"colspan="2"> a. Banjarbaru <br> b. {{ $rperjadin->perjadin->tujuan }}</td>
+        </tr>
+        <tr class="tabelbaris">
+            @php
+            $jumlahHari = \Carbon\Carbon::parse($rperjadin->perjadin->tgl_pulang)
+                ->diffInDays(\Carbon\Carbon::parse($rperjadin->perjadin->tgl_berangkat)) + 1;
+            @endphp
+            <td style="text-align: center; width: 4%; padding: 4px; vertical-align: top;">7</td>
+            <td style="padding: 4px; vertical-align: top;"> a. Lamanya Perjalanan Dinas <br> b. Tanggal Berangkat <br> c. Tanggal Harus Kembali/<br>&nbsp;&nbsp;&nbsp; Tiba Ditempat Baru </td>
+            <td style="padding: 4px; vertical-align: top;"colspan="2"> a. {{ $jumlahHari }} ({{ ucwords(trim(terbilang($jumlahHari))) }}) Hari <br> b. 12 Oktober 2026 <br> c. 14 Oktober 2026</td>
+        </tr>
+        <tr class="tabelbaris">
+            <td rowspan="2" style="text-align: center; width: 4%; padding: 4px; vertical-align: top;">8</td>
+            <td style="padding: 4px; vertical-align: top;"> &nbsp;&nbsp;&nbsp; Pengikut : &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Nama </td>
+            <td style="padding: 4px; vertical-align: top;"> Tanggal Lahir</td>
+            <td style="padding: 4px; vertical-align: top;"> Keterangan</td>
+        </tr>
+        <tr class="tabelbaris">
+            <td style="padding: 4px; vertical-align: top;">1. <br> 2. <br> 3. <br> 4. <br> 5. <br> </td>
+            <td style="padding: 4px; vertical-align: top;"></td>
+            <td style="padding: 4px; vertical-align: top;"></td>
+        </tr>
+        <tr class="tabelbaris">
+            <td style="text-align: center; width: 4%; padding: 4px; vertical-align: top;">9</td>
+            <td style="padding: 4px; vertical-align: top;">Pembebanan Anggaran <br> a. Instansi <br><br> b. Akun</td>
+            <td style="padding: 4px; vertical-align: top;"colspan="2"><br> a. Balai Pelatihan Koperasi dan Usaha Kecil<br>&nbsp;&nbsp;&nbsp; Provinsi Kalimantan Selatan <br> b. {{ $rperjadin->perjadin->anggaran->subkegiatan->kd_subkegiatan }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {{ $rperjadin->perjadin->anggaran->koderekening->kd_rekening }}   </td>
+        </tr>
+        
     </table>
-    
+    <br>
+    <br>
     {{-- TTD --}}
-    <table class="text" style="margin-left: 10px; border-collapse: collapse;">
+    <table class="text" style="margin-left: 5px; border-collapse: collapse;">
         <tr>
-            <td style="vertical-align: top;  width: 350px"></td>
+            <td style="vertical-align: top;  width: 450px"></td>
             <td style="vertical-align: top;  text-align:justify;">
-                <b>DITETAPKAN DI</b>
+                Dikeluarkan di
             </td>
             <td style="vertical-align: top; text-align:justify;">
-                <b>: BANJARBARU</b>
+                : Banjarbaru
             </td>
         </tr>
         <tr>
             <td></td>
             <td style="vertical-align: top; text-align:justify;">
-                <b>PADA TANGGAL</b>
+                Tanggal
             </td>
             <td style="vertical-align: top; text-align:justify;">
-                <b>: {{ strtoupper(\Carbon\Carbon::parse($rperjadin->perjadin->tgl_berangkat)->locale('id')->translatedFormat('d F Y')) }}</b><br><br>
+                : {{ \Carbon\Carbon::parse($rperjadin->perjadin->tgl_berangkat)->locale('id')->translatedFormat('d F Y') }}<br><br>
             </td>
         </tr>
         <tr>

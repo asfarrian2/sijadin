@@ -366,12 +366,7 @@ class PerjalanandinasController extends Controller
         $rperjadin    = Rperjadin::where('id_rperjadin', $id_rperjadin)->first();
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->setPaper([0, 0, 595.28, 935.43], 'potrait', [
-            'margin-top' => '0.5in',
-            'margin-right' => '0.5in',
-            'margin-bottom' => '0.5in',
-            'margin-left' => '0.5in',
-        ]);
+        $pdf->setPaper([0, 0, 595.28, 935.43], 'potrait');
         
         $pdf->loadView('admin.perjadin.sppd', compact('rperjadin'));
 
