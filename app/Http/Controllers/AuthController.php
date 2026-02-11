@@ -27,9 +27,9 @@ public function login(Request $request)
 
     if (Auth::attempt($credentials)) {
         $redirectUrls = [
-            'superadmin' => '/admin/dashboard',
-            'admin' => '/kb/dashboard',
-            'user' => '/dashboard',
+            'admin' => '/admin/dashboard',
+            'kpa' => '/kpa/dashboard',
+            'pptk' => '/dashboard',
         ];
 
         $id_tahun = Crypt::decrypt($request->tahun);

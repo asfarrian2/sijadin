@@ -16,24 +16,32 @@ use App\Models\Pegawai;
 
 class UserController extends Controller
 {
-    public function view_sadmin(){
+    public function view_admin(){
 
         $users   = User::where('role', 'superadmin')->get();
         $pegawai = Pegawai::where('status', '1')->get();
 
-        return view('admin.users.sadmin', compact('users', 'pegawai'));
+        return view('admin.users.admin', compact('users', 'pegawai'));
+    }
+
+    public function view_kpa(){
+
+        $users   = User::where('role', 'kpa')->get();
+        $pegawai = Pegawai::where('status', '1')->get();
+
+        return view('admin.users.kpa', compact('users', 'pegawai'));
     }
 
     public function store(Request $request){
 
         $id_user = User::latest('id')->first();
 
-        $kodeobjek ="541-";
+        $kodeobjek ="541";
 
         if($id_user == null){
             $nomorurut = "0001";
         }else{
-            $nomorurut = substr($id_user->id, 4, 4) + 1;
+            $nomorurut = substr($id_user->id, 3, 4) + 1;
             $nomorurut = str_pad($nomorurut, 4, "0", STR_PAD_LEFT);
         }
         $id=$kodeobjek.$nomorurut;

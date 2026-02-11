@@ -78,7 +78,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="basic-form">
-                                                <form action="{{ route('a.users')}}" method="POST">
+                                                <form action="{{ route('a.admin')}}" method="POST">
                                                 @csrf
                                                 <div class="mb-3">
                                                     <label class="form-label">Pegawai :</label>

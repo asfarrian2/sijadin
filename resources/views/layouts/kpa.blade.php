@@ -63,7 +63,7 @@
             Nav header start
         ***********************************-->
         <div class="nav-header">
-            <a href="/admin/dashboardAll" class="brand-logo">
+            <a href="//dashboardAll" class="brand-logo">
                 <img src="{{asset ('assets/images/logo-utama.png') }}" width="80px">
                 <img src="{{asset ('assets/images/logo-text-3.png') }}" class="brand-title" width="90px">
             </a>
@@ -89,7 +89,7 @@
 						<a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown">
 							<img src="{{ asset('assets/images/profile/avatar.png') }}" width="20" alt=""/>
 							<div class="header-info ms-3">
-								<span class="font-w600 ">ADMIN BAKATKOP</span>
+								<span class="font-w600 "> BAKATKOP</span>
 								<small class="text-start font-w400">Prov. Kalimantan Selatan</small>
 							</div>
 						</a>
@@ -108,39 +108,21 @@
 					<p><strong>Home</strong></p>
 				    </div>
                     <li>
-                        <a class="ai-icon" href="javascript:void()" aria-expanded="false">
+                        <a class="ai-icon" href="{{Route('dashboard.kpa')}}" aria-expanded="false">
 							<i class="flaticon-025-dashboard"></i>
 							<span class="nav-text">Dashboard</span>
 						</a>
                     </li>
                     <div class="copyright">
-                    <p><strong>Master</strong></p>
+                    <p><strong>Monitoring</strong></p>
                     </div>
-                    <li><a href="{{ Route('pegawai')}}" class="ai-icon" aria-expanded="false"  @if(Request::is('admin/pegawai*')) style="background-color: #eefaf9;" @endif>
-						<i class="flaticon-381-user-8"></i>
-							<span class="nav-text">Pegawai</span>
-						</a>
-                    </li>
-                    <li><a href="javascript:void()" class="has-arrow ai-icon" aria-expanded="false"  @if(Request::is('admin/sumberdana*')) style="background-color: #eefaf9;" @endif>
-							<i class="flaticon-381-notebook-1"  @if(Request::is('admin/sumberdana*')) style="color: #5bcfc5;" @endif></i>
-							<span class="nav-text">Sumber Dana</span>
-						</a>
-                        <ul aria-expanded="false" @if(Request::is('admin/sumberdana*')) class="mm-collapse mm-show" @endif>
-                            <li @if(Request::is('admin/sumberdana/subkegiatan*')) class="mm-active" @endif><a href="{{ Route('subkegiatan')}}" @if(Request::is('admin/sumberdana/subkegiatan*')) class="mm-active" @endif>Sub Kegiatan</a></li>
-                            <li @if(Request::is('admin/sumberdana/koderekening*')) class="mm-active" @endif><a href="{{ Route('koderekening')}}" @if(Request::is('admin/sumberdana/koderekening*')) class="mm-active" @endif>Kode Rekening</a></li>
-                            <li @if(Request::is('admin/sumberdana/tahun*')) class="mm-active" @endif><a href="{{ Route('tahun')}}" @if(Request::is('admin/sumberdana/tahun*')) class="mm-active" @endif>Anggaran</a></li>
-                        </ul>
-					</li>
-                    <div class="copyright">
-                    <p><strong>Entry</strong></p>
-                    </div>
-                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false"  @if(Request::is('admin/perjadin*')) style="background-color: #eefaf9;" @endif>
-							<i class="flaticon-381-location-3" @if(Request::is('admin/perjadin*')) style="color: #5bcfc5;" @endif></i>
+                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false"  @if(Request::is('/perjadin*')) style="background-color: #eefaf9;" @endif>
+							<i class="flaticon-381-location-3" @if(Request::is('/perjadin*')) style="color: #5bcfc5;" @endif></i>
 							<span class="nav-text">Perjalanan Dinas</span>
 						</a>
                         <ul aria-expanded="false">
-                            <li @if(Request::is('admin/perjadin/pegawai*')) class="mm-active" @endif><a href="{{ Route('perjadin')}}" @if(Request::is('admin/perjadin/pegawai*')) class="mm-active" @endif>Pegawai</a></li>
-                            <li @if(Request::is('admin/perjadin/diklat*')) class="mm-active" @endif><a href="/admin/perjalanandinas/diklat" @if(Request::is('admin/perjadin/diklat*')) class="mm-active" @endif>Narasumber / Peserta Diklat</a></li>
+                            <li @if(Request::is('/perjadin/pegawai*')) class="mm-active" @endif><a href="" @if(Request::is('/perjadin/pegawai*')) class="mm-active" @endif>Pegawai</a></li>
+                            <li @if(Request::is('/perjadin/diklat*')) class="mm-active" @endif><a href="" @if(Request::is('/perjadin/diklat*')) class="mm-active" @endif>Narasumber / Peserta Diklat</a></li>
                         </ul>
                     </li>
                     <div class="copyright">
@@ -151,24 +133,14 @@
 							<span class="nav-text">Laporan</span>
 						</a>
                         <ul aria-expanded="false">
-                            <li><a href="/admin/laporan/target">Rekapitulasi SPT</a></li>
-                            <li><a href="/admin/laporan/realisasi">Rekapitulasi SPPD</a></li>
-                            <li><a href="/admin/laporan/skpduptd">Realisasi Perjalanan Dinas</a></li>
+                            <li><a href="//laporan/target">Rekapitulasi SPT</a></li>
+                            <li><a href="//laporan/realisasi">Rekapitulasi SPPD</a></li>
+                            <li><a href="//laporan/skpduptd">Realisasi Perjalanan Dinas</a></li>
                         </ul>
                     </li>
                     <div class="copyright">
                     <p><strong>Manage</strong></p>
                     </div>
-                    <li><a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-							<i class="flaticon-381-user-7"></i>
-							<span class="nav-text">Akun</span>
-						</a>
-                        <ul aria-expanded="false">
-                            <li><a href="{{ Route('admin') }}">Admin</a></li>
-                            <li><a href="{{ Route('kpa')}}">KPA</a></li>
-                            <li><a href="/admin/subretribusi">PPTK</a></li>
-                        </ul>
-                    </li>
                     <li><a class="ai-icon" href="javascript:void()" aria-expanded="false">
 						<i class="flaticon-060-on"></i>
 							<span class="nav-text">Informasi</span>

@@ -1,4 +1,4 @@
-         <form action="{{ Route('u.koderekening')}}"  method="POST" enctype="multipart/form-data">
+         <form action="{{ Route('u.admin')}}"  method="POST" enctype="multipart/form-data">
          @csrf
              <div class="mb-3">
                  <label class="form-label">Kode Rekening :</label>

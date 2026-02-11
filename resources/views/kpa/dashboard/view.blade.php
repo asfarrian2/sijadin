@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.kpa')
 
 @section('header')
 
@@ -51,6 +51,28 @@
                     </button>
                 </div>
         @endif
+                <!-- End Pemberitahuan -->
+				<div class="row page-titles">
+					<ol class="breadcrumb">
+						<li class="breadcrumb-item active"><a href="/admin/dashboard">SIJADIN</a></li>
+						<li class="breadcrumb-item">Dashboard</li>
+					</ol>
+                </div>
+                
+                <!-- row -->
+                 <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Data Anggaran</h4>
+                            </div>
+                            
+                            <div class="card-body">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!--**********************************

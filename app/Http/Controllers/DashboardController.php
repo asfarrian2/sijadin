@@ -11,4 +11,9 @@ class DashboardController extends Controller
 
         return view('admin.dashboard.view');
     }
+
+    public function kpa(){
+
+        return view('kpa.dashboard.view');
+    }
 }

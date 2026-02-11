@@ -29,7 +29,7 @@ Route::post('/auth/login', [AuthController::class, 'login'])->name('auth');
 Route::get('/auth/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-Route::group(['middleware' => ['auth', 'role:superadmin']], function () {
+Route::group(['middleware' => ['auth', 'role:admin']], function () {
 // Dashboard
 Route::get('/admin/dashboard', [DashboardController::class, 'view']);
 
@@ -94,15 +94,22 @@ Route::post('/simpanperjadin-pegawai', [PerjalanandinasController::class, 'simpa
 Route::post('/admin/perjadin/pegawai/listpegawai', [PerjalanandinasController::class, 'list_pegawai']);
 Route::post('/perjadin/hapus-pegawai', [PerjalanandinasController::class, 'hapusPegawai']);
 Route::get('/admin/perjadin/pegawai/spt/{id_perjadin}', [PerjalanandinasController::class, 'laporanSpt']);
-
+Route::get('/admin/perjadin/pegawai/sppd/{id_rperjadin}', [PerjalanandinasController::class, 'laporanSppd']);
 
 
 // User
-Route::get('/admin/users/superadmin', [UserController::class, 'view_sadmin'])->name('superadmin');
-Route::post('/admin/users/store', [UserController::class, 'store'])->name('a.users');
+Route::get('/admin/users/admin', [UserController::class, 'view_admin'])->name('admin');
+Route::get('/admin/users/kpa', [UserController::class, 'view_kpa'])->name('kpa');
+Route::post('/admin/users/store', [UserController::class, 'store'])->name('a.admin');
 Route::post('/admin/users/edit', [UserController::class, 'edit']);
-Route::post('/admin/users/update', [UserController::class, 'update'])->name('u.users');
+Route::post('/admin/users/update', [UserController::class, 'update'])->name('u.admin');
 Route::get('/admin/users/hapus{id}', [UserController::class, 'hapus']);
 Route::get('/admin/users/status{id}', [UserController::class, 'status']);
+
+});
+
+Route::group(['middleware' => ['auth', 'role:kpa']], function () {
+// Dashboard
+Route::get('/kpa/dashboard', [DashboardController::class, 'kpa'])->name('dashboard.kpa');
 
 });
