@@ -95,7 +95,18 @@
                                                  <div class="mb-3">
                                                     <label class="form-label">Jabatan :</label>
                                                     <input type="text" name="jabatan" class="form-control input-default" required>
-                                                </div>    
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Status Pegawai :</label>
+                                                    <select class="input-default form-control" name="kelas" required>
+                                                        <option value="">Pilih Status Pegawai</option>
+                                                        <option value="1">Pejabat Administrator (Ess.III)</option>
+                                                        <option value="2">Pejabat Pengawas (Ess.IV)</option>
+                                                        <option value="3">Staf (PNS)</option>
+                                                        <option value="4">Staf (PPPK)</option>
+                                                        <option value="5">Staf (PPPKPW)</option>
+                                                </select>
+                                                </div>      
                                             </div>
                                         </div>
                                         <div class="modal-footer">

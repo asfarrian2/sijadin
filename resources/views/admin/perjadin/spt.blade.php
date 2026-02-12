@@ -74,7 +74,7 @@
         <tr>
             <td style="text-align: center;" colspan="10">
                 <span class="text">
-                      NOMOR : 800.1.11.1/     /22.6/BPKUK/2026
+                      NOMOR : 800.1.11.1/ &nbsp; &nbsp; &nbsp; &nbsp;/22.6/BPKUK/2026
                 </span>
             </td>
         </tr>
@@ -86,7 +86,7 @@
             <td style="width: 90px; vertical-align: top;" rowspan="2">DASAR</td>
             <td style="vertical-align: top;" rowspan="2">:</td>
             <td>1. </td>
-            <td>{{ $perjadin->anggaran->dpa->dpa}} Tahun Anggaran {{ $perjadin->anggaran->dpa->tahun->tahun}}</td>
+            <td>{{ $perjadin->anggaran->dpa->dpa}} Tanggal {{ \Carbon\Carbon::parse($perjadin->anggaran->dpa->tgl)->locale('id')->translatedFormat('d F Y') }}</td>
         </tr>
         <tr>
         @if ($perjadin->dasar == '-')
@@ -99,19 +99,23 @@
     <br>
     {{-- MEMERINTAHKAN --}}
     <span class="title" style="display: block; text-align: center;"> MEMERINTAHKAN :</span>
+    <br>
     <table class="text" style="margin-left: 60px">
         <tr>
             <td style="vertical-align: top; width: 90px">Kepada :</td>
             <td style="vertical-align: top; width: 25px">
             @foreach ($rperjadin as $d )
-                {{$loop->iteration}}. <br><br><br><br><br>
+                {{$loop->iteration}}. <br><br><br><br>@if ($d->pegawai->pangkgol == NULL)@else<br>@endif
             @endforeach
             </td>
             <td style="vertical-align: top;">
             @foreach ($rperjadin as $d )
             Nama
+            @if ($d->pegawai->pangkgol == NULL)
+            @else
             <br>
             Pangkat/Gol.
+            @endif
             <br>
             N I P
             <br>
@@ -123,8 +127,11 @@
             <td style="vertical-align: top;">
             @foreach ($rperjadin as $d )
             : <b>{{ $d->pegawai->nama}}</b>    
+             @if ($d->pegawai->pangkgol == NULL)
+            @else
             <br>
             : {{ $d->pegawai->pangkgol}}
+            @endif
             <br>
             : {{ $d->pegawai->nip}}
             <br>

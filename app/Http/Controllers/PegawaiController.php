@@ -24,15 +24,15 @@ class PegawaiController extends Controller
 
     public function store(Request $request){
 
-        $id_pegawai = Pegawai::latest('id_pegawai')->first();
+        $id_pegawai = Pegawai::where('jenis', '1')->latest('id_pegawai')->first();
 
         $kodeobjek ="asn-";
 
         if($id_pegawai == null){
-            $nomorurut = "001";
+            $nomorurut = "00000000001";
         }else{
-            $nomorurut = substr($id_pegawai->id_pegawai, 4, 3) + 1;
-            $nomorurut = str_pad($nomorurut, 3, "0", STR_PAD_LEFT);
+            $nomorurut = substr($id_pegawai->id_pegawai, 4, 15) + 1;
+            $nomorurut = str_pad($nomorurut, 15, "0", STR_PAD_LEFT);
         }
         $id=$kodeobjek.$nomorurut;
 
@@ -40,6 +40,7 @@ class PegawaiController extends Controller
         $nip            = $request->nip;
         $pangkgol       = $request->pangkgol;
         $jabatan        = $request->jabatan;
+        $kelas          = $request->kelas;
 
         $data = [
             'id_pegawai' => $id,
@@ -47,6 +48,8 @@ class PegawaiController extends Controller
             'nip'        => $nip,
             'pangkgol'   => $pangkgol,
             'jabatan'    => $jabatan,
+            'kelas'      => $kelas,
+            'jenis'      => '0',
             'status'     => '1'
         ];
         $simpan = Pegawai::create($data);

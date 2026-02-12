@@ -140,7 +140,8 @@
 						</a>
                         <ul aria-expanded="false">
                             <li @if(Request::is('admin/perjadin/pegawai*')) class="mm-active" @endif><a href="{{ Route('perjadin')}}" @if(Request::is('admin/perjadin/pegawai*')) class="mm-active" @endif>Pegawai</a></li>
-                            <li @if(Request::is('admin/perjadin/diklat*')) class="mm-active" @endif><a href="/admin/perjalanandinas/diklat" @if(Request::is('admin/perjadin/diklat*')) class="mm-active" @endif>Narasumber / Peserta Diklat</a></li>
+                            <li @if(Request::is('admin/perjadin/narasumber*')) class="mm-active" @endif><a href="{{ Route('aknarsum') }}" @if(Request::is('admin/perjadin/narasumber*')) class="mm-active" @endif>Narasumber / Fasilitator</a></li>
+                            <li @if(Request::is('admin/perjadin/diklat*')) class="mm-active" @endif><a href="/admin/perjalanandinas/diklat" @if(Request::is('admin/perjadin/diklat*')) class="mm-active" @endif>Peserta Diklat</a></li>
                         </ul>
                     </li>
                     <div class="copyright">

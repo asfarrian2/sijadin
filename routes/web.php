@@ -4,6 +4,7 @@ use App\Http\Controllers\AnggaranController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KoderekeningController;
+use App\Http\Controllers\NarsumController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\PerjalanandinasController;
 use App\Http\Controllers\SubkegiatanController;
@@ -96,6 +97,16 @@ Route::post('/perjadin/hapus-pegawai', [PerjalanandinasController::class, 'hapus
 Route::get('/admin/perjadin/pegawai/spt/{id_perjadin}', [PerjalanandinasController::class, 'laporanSpt']);
 Route::get('/admin/perjadin/pegawai/sppd/{id_rperjadin}', [PerjalanandinasController::class, 'laporanSppd']);
 
+//Narsum
+Route::get('/admin/perjadin/narasumber', [NarsumController::class, 'view_admin'])->name('aknarsum');
+Route::post('/admin/perjadin/narasumber/store', [NarsumController::class, 'store'])->name('a.aknarsum');
+Route::post('/admin/perjadin/narasumber/edit', [NarsumController::class, 'edit']);
+Route::post('/admin/perjadin/narasumber/update', [NarsumController::class, 'update'])->name('u.aknarsum');
+
+Route::get('/admin/narasumber', [NarsumController::class, 'narsum_admin'])->name('narsum');
+Route::post('/admin/narasumber/store', [NarsumController::class, 'store'])->name('a.narsum');
+Route::post('/admin/narasumber/edit', [NarsumController::class, 'edit']);
+Route::post('/admin/narasumber/update', [NarsumController::class, 'update'])->name('u.narsum');
 
 // User
 Route::get('/admin/users/admin', [UserController::class, 'view_admin'])->name('admin');

@@ -11,7 +11,7 @@
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
 							<div class="dashboard_bar">
-                                Perjalanan Dinas
+                                Akomodasi Narasumber/Fasilitator Diklat
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
 				<div class="row page-titles">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item active"><a href="/admin/dashboard">SIJADIN</a></li>
-						<li class="breadcrumb-item">Perjalanan Dinas</li>
+						<li class="breadcrumb-item">Akomodasi Diklat</li>
 					</ol>
                 </div>
                 <!-- row -->
@@ -65,7 +65,14 @@
                             <div class="card-header">
                                 <h4 class="card-title">Tabel Data</h4>
                                 <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#tambahdata">+Tambah</button>
+                                <table>
+                                    <tr>
+                                        <td>
+                                        <button type="button" class="btn btn-info mb-2" data-bs-toggle="modal" data-bs-target="#tambahdata"><i class="fa fa-users"></i> Narasumber</button>
+                                        <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#tambahdata"><i class="fa fa-plus"></i> Tambah</button>
+                                        </td>
+                                    </tr>
+                                </table>
                             </div>
                             <!-- Start Modal -->
                             <div class="modal fade" id="tambahdata">
