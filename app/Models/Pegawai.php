@@ -9,7 +9,7 @@ use App\Models\Anggaran;
 class Pegawai extends Model
 {
     protected $table='tb_pegawai';
-    protected $fillable = ['id_pegawai', 'nama', 'nip', 'pangkgol', 'jabatan', 'status', 'kelas'];
+    protected $fillable = ['id_pegawai', 'nama', 'nip', 'pangkgol', 'jabatan', 'status', 'kelas', 'jenis'];
 
     public function anggaran()
     {

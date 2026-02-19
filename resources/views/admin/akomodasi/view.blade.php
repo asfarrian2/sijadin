@@ -11,7 +11,7 @@
                     <div class="collapse navbar-collapse justify-content-between">
                         <div class="header-left">
 							<div class="dashboard_bar">
-                                Data Narasumber/Fasilitator Diklat
+                                Akomodasi Narasumber/Fasilitator Diklat
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,6 @@
 				<div class="row page-titles">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item active"><a href="/admin/dashboard">SIJADIN</a></li>
-						<li class="breadcrumb-item active"><a href="/admin/dashboard">Akomodasi Diklat</a></li>
 						<li class="breadcrumb-item">Akomodasi Diklat</li>
 					</ol>
                 </div>
@@ -69,7 +68,7 @@
                                 <table>
                                     <tr>
                                         <td>
-                                        <button type="button" class="btn btn-info mb-2" data-bs-toggle="modal" data-bs-target="#tambahdata"><i class="fa fa-users"></i> Narasumber</button>
+                                        <a class="btn btn-info mb-2" href="{{ Route('narsum')}}"><i class="fa fa-users"></i> Narasumber</a>
                                         <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#tambahdata"><i class="fa fa-plus"></i> Tambah</button>
                                         </td>
                                     </tr>
@@ -86,7 +85,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="basic-form">
-                                                <form action="{{ route('a.perjadin')}}" method="POST">
+                                                <form action="{{ route('a.perfasilitator')}}" method="POST">
                                                 @csrf
                                                 <div class="mb-3">
                                                     <label class="form-label">Dasar Anggaran:</label>
@@ -112,7 +111,7 @@
                                                     <textarea style="height: 80px;" name="keperluan" class="form-control" required></textarea>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label class="form-label">Tujuan :</label>
+                                                    <label class="form-label">Asal Tujuan :</label>
                                                     <input type="text" name="tujuan" class="form-control input-default" required>
                                                 </div>  
                                                 <div class="mb-3">
@@ -150,7 +149,7 @@
                                                 <th style="text-align:center;">NOMOR SPT</th>
                                                 <th style="text-align:center;">KEPERLUAN / PERIODE / TUJUAN</th>
                                                 <th style="text-align:center;">JENIS</th>
-                                                <th style="text-align:center; width: 200px">PEGAWAI</th>
+                                                <th style="text-align:center; width: 200px">NARASUMBER</th>
                                                 <th style="text-align:center;">STATUS</th>
                                                 <th style="text-align:center;">AKSI</th>
                                             </tr>
@@ -160,7 +159,7 @@
                                             <tr>
                                                 <td style="color: black; text-align:center;">{{ $loop->iteration }}</td>
                                                 <td style="color: black; text-align:center;">{{$d->dasar}}</td>
-                                                <td style="color: black;">{{$d->keperluan}}<br>Periode : {{ \Carbon\Carbon::parse($d->tgl_berangkat)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($d->tgl_pulang)->format('d/m/Y') }} ({{ \Carbon\Carbon::parse($d->tgl_pulang)->diffInDays(\Carbon\Carbon::parse($d->tgl_berangkat)) + 1 }} Hari)<br>Tujuan: {{ $d->tujuan }}</td>
+                                                <td style="color: black;">{{$d->keperluan}}<br>Periode : {{ \Carbon\Carbon::parse($d->tgl_berangkat)->format('d/m/Y') }} - {{ \Carbon\Carbon::parse($d->tgl_pulang)->format('d/m/Y') }} ({{ \Carbon\Carbon::parse($d->tgl_pulang)->diffInDays(\Carbon\Carbon::parse($d->tgl_berangkat)) + 1 }} Hari)<br>Tujuan/Asal: {{ $d->tujuan }}</td>
                                                 <td style="color: black; text-align:center;">
                                                     @if ($d->jenis == '1')
                                                     Dalam Daerah
@@ -168,14 +167,18 @@
                                                     Luar Daerah    
                                                     @endif
                                                 </td>
-                                                 <td style="color: black;">
+                                                 <td style="color: black; text-align:center;">
                                                      @foreach ($d->rperjadin->take(3) as $index => $r )
                                                          <p style="color: rgb(11, 85, 57);" class="mb-0">{{ $r->pegawai->nama }}</p>@if ($index < 2 && $d->rperjadin->count() > 3)@endif
                                                      @endforeach
                                                      @if ($d->rperjadin->count() > 3)
-                                                         Dll...
+                                                         Dll... 
                                                      @endif 
-                                                    <a type="button" class="listpegawai" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-list color-muted"></i> View</a>
+                                                     @if ($d->rperjadin->count() == 0)
+                                                         Data TIdak Ada
+                                                     @else
+                                                     <a type="button" class="listpegawai" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-list color-muted"></i> View</a>
+                                                     @endif
                                                 </td>
                                                 @if ($d->status == '0')
                                                     <td style="text-align:center;"><span class="badge light badge-warning">Draft</span></td>
@@ -193,11 +196,10 @@
 														<div class="dropdown-menu">
                                                              @if ($d->status == '0')
                                                             <a type="button" class="dropdown-item status" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-send color-muted"></i> Submit</a>
-                                                            <a type="button" class="dropdown-item addpegawai" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-plus color-muted"></i> Pegawai</a>
+                                                            <a type="button" class="dropdown-item addpegawai" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-plus color-muted"></i> Narasumber</a>
 															<a type="button" class="dropdown-item edit" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-pencil color-muted"></i> Edit</a>
 															<a type="button" class="dropdown-item hapus" data-id="{{Crypt::encrypt($d->id_perjadin)}}" ><i class="fa fa-trash color-muted"></i> Hapus</a>
                                                             @elseif ($d->status == '1')
-                                                            <a type="button" href="/admin/perjadin/pegawai/spt/{{Crypt::encrypt($d->id_perjadin)}}" class="dropdown-item" target="_BLANK"> <i class="fa fa-print color-muted"></i> SPT</a>
                                                             <a type="button" class="dropdown-item status" data-id="{{Crypt::encrypt($d->id_perjadin)}}"> <i class="fa fa-ban color-muted"></i> Batalkan</a>
                                                             @else
                                                             @endif
@@ -211,9 +213,9 @@
                                             <tr>
                                                 <th style="text-align:center;">NO.</th>
                                                 <th style="text-align:center;">NOMOR SPT</th>
-                                                <th style="text-align:center;">KEPERLUAN / PERIODE / TUJUAN</th>
+                                                <th style="text-align:center;">KEPERLUAN / PERIODE / ASAL TUJUAN</th>
                                                 <th style="text-align:center;">JENIS</th>
-                                                <th style="text-align:center;">PEGAWAI</th>
+                                                <th style="text-align:center;">NARASUMBER</th>
                                                 <th style="text-align:center;">STATUS</th>
                                                 <th style="text-align:center;">AKSI</th>
                                             </tr>
@@ -245,15 +247,12 @@
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h3 class="modal-title">Tambah Pegawai</h3>
+                                            <h3 class="modal-title">Tambah Faslitator/Narasumber</h3>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal">
                                             </button>
                                         </div>
                                         <div class="modal-body" id="loadaddpegawai">
                                             
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" id="simpan-pegawai"><i class="fa fa-save color-muted"></i> Simpan</button>
                                         </div>
                                     </div>
                                 </div>
@@ -264,7 +263,7 @@
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h3 class="modal-title">List Pegawai</h3>
+                                            <h3 class="modal-title">List Narasumber / Fasilitator</h3>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal">
                                             </button>
                                         </div>
@@ -321,8 +320,6 @@
         tglPulang.min = tglBerangkat.value;
     });
     </script>
-
-    
 
     <!-- Button Edit SPJ -->
     <script>
@@ -438,7 +435,7 @@ function getSubKegiatan() {
 
         $.ajax({
             type: 'POST',
-            url: '/admin/perjadin/pegawai/addpegawai',
+            url: '/admin/perjadinfasilitator/addnarsum',
             cache: false,
             data: {
                 _token: "{{ csrf_token() }}",
@@ -447,63 +444,15 @@ function getSubKegiatan() {
             success: function (respond) {
                 $("#loadaddpegawai").html(respond);
                 $("#modal-addpegawai").modal("show");
+                $('#narsum').select2({
+                    dropdownParent: $('#modal-addpegawai'),
+                    width: '100%',
+                    placeholder: "Ketik nama fasilitator..."
+                }); 
             }
         });
     });
 
-    // =======================
-    // SIMPAN PEGAWAI
-    // =======================
-    $(document).on('click', '#simpan-pegawai', function () {
-
-    var pegawaiId = [];
-    $('.pegawai-checkbox:checked').each(function () {
-        pegawaiId.push($(this).val());
-    });
-
-    if (pegawaiId.length === 0) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Perhatian',
-            text: 'Pilih minimal satu pegawai'
-        });
-        return;
-    }
-
-        $.ajax({
-            type: 'POST',
-            url: '/simpanperjadin-pegawai',
-            data: {
-                _token: '{{ csrf_token() }}',
-                id_perjadin: id_perjadin,
-                pegawai_id: pegawaiId
-            },
-            success: function (response) {
-                if (response.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Sukses',
-                        text: response.message,
-                    }).then(() => {
-                        location.reload(); //REFRESH HALAMAN
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal',
-                        text: response.error ?? 'Terjadi kesalahan'
-                    });
-                }
-            },
-            error: function (xhr) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: xhr.responseJSON?.error ?? 'Server error'
-                });
-            }
-        });
-    });
     </script>
 
     <script>
@@ -516,7 +465,7 @@ $(document).on('click', '.listpegawai', function () {
 
     $.ajax({
         type: 'POST',
-        url: '/admin/perjadin/pegawai/listpegawai',
+        url: '/admin/perjadinfasilitator/listnarsum',
         data: {
             _token: "{{ csrf_token() }}",
             id_perjadin: id_perjadin

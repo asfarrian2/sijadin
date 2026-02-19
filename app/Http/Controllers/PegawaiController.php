@@ -24,7 +24,7 @@ class PegawaiController extends Controller
 
     public function store(Request $request){
 
-        $id_pegawai = Pegawai::where('jenis', '1')->latest('id_pegawai')->first();
+        $id_pegawai = Pegawai::where('jenis', '0')->latest('id_pegawai')->first();
 
         $kodeobjek ="asn-";
 
@@ -124,7 +124,7 @@ class PegawaiController extends Controller
         }
     }
 
-        public function hapus($id_pegawai){
+    public function hapus($id_pegawai){
 
         $id_pegawai = Crypt::decrypt($id_pegawai);
 

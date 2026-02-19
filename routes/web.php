@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AkomodasinarsumController;
 use App\Http\Controllers\AnggaranController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -98,15 +99,21 @@ Route::get('/admin/perjadin/pegawai/spt/{id_perjadin}', [PerjalanandinasControll
 Route::get('/admin/perjadin/pegawai/sppd/{id_rperjadin}', [PerjalanandinasController::class, 'laporanSppd']);
 
 //Narsum
-Route::get('/admin/perjadin/narasumber', [NarsumController::class, 'view_admin'])->name('aknarsum');
-Route::post('/admin/perjadin/narasumber/store', [NarsumController::class, 'store'])->name('a.aknarsum');
-Route::post('/admin/perjadin/narasumber/edit', [NarsumController::class, 'edit']);
-Route::post('/admin/perjadin/narasumber/update', [NarsumController::class, 'update'])->name('u.aknarsum');
+Route::get('/admin/perjadinfasilitator', [AkomodasinarsumController::class, 'view_admin'])->name('perfasilitator');
+Route::post('/admin/perjadinfasilitator/store', [AkomodasinarsumController::class, 'store'])->name('a.perfasilitator');
+Route::post('/admin/perjadinfasilitator/edit', [AkomodasinarsumController::class, 'edit']);
+Route::post('/admin/perjadinfasilitator/update', [AkomodasinarsumController::class, 'update'])->name('u.perfasilitator');
+Route::post('/admin/perjadinfasilitator/addnarsum', [AkomodasinarsumController::class, 'add_narsum']);
+Route::post('/admin/perjadinfasilitator/simpannarsum', [AkomodasinarsumController::class, 'SimpanNarsum']);
+Route::post('/admin/perjadinfasilitator/listnarsum', [AkomodasinarsumController::class, 'list_narsum']);
 
-Route::get('/admin/narasumber', [NarsumController::class, 'narsum_admin'])->name('narsum');
-Route::post('/admin/narasumber/store', [NarsumController::class, 'store'])->name('a.narsum');
-Route::post('/admin/narasumber/edit', [NarsumController::class, 'edit']);
-Route::post('/admin/narasumber/update', [NarsumController::class, 'update'])->name('u.narsum');
+
+Route::get('/admin/perjadinfasilitator/narasumber', [NarsumController::class, 'view'])->name('narsum');
+Route::post('/admin/perjadinfasilitator/narasumber/store', [NarsumController::class, 'store'])->name('a.narsum');
+Route::post('/admin/perjadinfasilitator/narasumber/edit', [NarsumController::class, 'edit']);
+Route::post('/admin/perjadinfasilitator/narasumber/update', [NarsumController::class, 'update'])->name('u.narsum');
+Route::get('/admin/perjadinfasilitator/narasumber/status{id_pegawai}', [NarsumController::class, 'status']);
+Route::get('/admin/perjadinfasilitator/narasumber/hapus{id_perjadin}', [NarsumController::class, 'hapus']);
 
 // User
 Route::get('/admin/users/admin', [UserController::class, 'view_admin'])->name('admin');

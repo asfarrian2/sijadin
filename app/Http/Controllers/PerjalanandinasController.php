@@ -54,7 +54,7 @@ class PerjalanandinasController extends Controller
         $tahun   = $tahun->tahun;
 
 
-        $id_perjadin = Perjalanandinas::latest('id_perjadin')->first();
+        $id_perjadin = Perjalanandinas::where('pengguna', '1')->latest('id_perjadin')->first();
 
         $kodeobjek ="tl".$tahun."-";
 

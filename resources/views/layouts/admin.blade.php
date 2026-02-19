@@ -28,10 +28,9 @@
      <link href="{{ asset ('assets/vendor/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
 	<!-- Style css -->
     <link href="{{ asset ('assets/vendor/jquery-nice-select/css/nice-select.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset ('assets/vendor/select2/css/select2.min.css') }}">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ asset ('assets/vendor/select2/css/select2.min.css') }}">
-	<link href="{{ asset ('assets/vendor/jquery-nice-select/css/nice-select.css') }}" rel="stylesheet">
 
 </head>
 <body>
@@ -140,7 +139,7 @@
 						</a>
                         <ul aria-expanded="false">
                             <li @if(Request::is('admin/perjadin/pegawai*')) class="mm-active" @endif><a href="{{ Route('perjadin')}}" @if(Request::is('admin/perjadin/pegawai*')) class="mm-active" @endif>Pegawai</a></li>
-                            <li @if(Request::is('admin/perjadin/narasumber*')) class="mm-active" @endif><a href="{{ Route('aknarsum') }}" @if(Request::is('admin/perjadin/narasumber*')) class="mm-active" @endif>Narasumber / Fasilitator</a></li>
+                            <li @if(Request::is('admin/perjadinfasilitator*')) class="mm-active" @endif><a href="{{ Route('perfasilitator') }}" @if(Request::is('admin/perjadinfasilitator*')) class="mm-active" @endif>Narasumber / Fasilitator</a></li>
                             <li @if(Request::is('admin/perjadin/diklat*')) class="mm-active" @endif><a href="/admin/perjalanandinas/diklat" @if(Request::is('admin/perjadin/diklat*')) class="mm-active" @endif>Peserta Diklat</a></li>
                         </ul>
                     </li>
